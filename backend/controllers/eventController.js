@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Event from "../models/eventModel.js"
+import { createNotification } from "./notificationController.js";
 
 //creating event
 export const createEvent=async(req,res)=>{
@@ -139,6 +140,20 @@ export const registerForEvent=async(req,res)=>{
         event.registereduser.push(userId);
         await event.save();
 
+        //notificaton create krte hai
+       const notification=await createNotification(
+            userId,
+            `user registered for the ${event.title} successfuly`,
+            "registration_success",
+            eventId
+        )
+        if(!notification){
+            return res.status(400).json({
+                success:false,
+                msg:"error in creating notification"
+            })
+        }
+
         return res.status(200).json({
             success:true,
             msg:"successfully registered for the event",
@@ -151,6 +166,64 @@ export const registerForEvent=async(req,res)=>{
     } catch (error) {
         console.error("registration error:",error);
         res.status(500).json({
+            success:false,
+            msg:"internal server error"
+        })
+    }
+}
+
+//unregisterForEvent
+export const unregisterForEvent=async(req,res)=>{
+    try {
+        const userId=req.user.id;
+        const eventId=req.params.id;
+
+        const event=await Event.findById(eventId);
+        if(!event){
+            return res.status(400).json({
+                success:false,
+                msg:"event do not exist"
+            })
+        }
+        const date=new Date();
+        if(event.eventdate<date){
+            return res.status(400).json({
+                success:true,
+                msg:"event is passed you can not unregister",
+            })
+        }
+        //now unregister from event
+        console.log("UserId to remove:", userId.toString());
+        console.log("Before filtering:", event.registereduser.map(u => u.toString()));
+        event.registereduser = event.registereduser.filter(user => {
+        return user.toString() !== userId.toString();
+        });
+        console.log("After filtering:", event.registereduser.map(u => u.toString()));
+        await event.save();
+
+        //notification creation
+        const notification=await createNotification(
+            userId,
+            `user unregistered for the ${event.title}`,
+            "registration_canceled",
+            eventId 
+        )
+        if(!notification){
+            return res.status(400).json({
+                success:false,
+                msg:"error in creating notifications"
+            })
+        }
+        return res.status(200).json({
+            success:true,
+            msg:"successfuly unregistered to the event",
+            data:{
+                event
+            }
+        })
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
             success:false,
             msg:"internal server error"
         })

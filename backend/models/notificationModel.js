@@ -13,7 +13,7 @@ const Notifications=new mongoose.Schema({
     },
     type:{
         type:String,
-        enum:['registration_success','event_reminder','event_updated','event_cancelled'],
+        enum:['registration_success','event_reminder','event_updated','event_cancelled','registration_canceled'],
         default:'registration_success'
     },
     read:{
