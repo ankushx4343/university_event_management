@@ -37,7 +37,7 @@ const Event = new mongoose.Schema({
         min: [1, "capacity must be at least 1"]
     },
     registereduser: [{
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
 

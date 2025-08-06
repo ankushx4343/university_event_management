@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import Event from "../models/eventModel.js"
 import { createNotification } from "./notificationController.js";
 
@@ -91,6 +91,91 @@ export const getEventById=async(req,res)=>{
     }
 }
 
+//update event
+export const updateEvent=async(req,res)=>{
+    try {
+        const userId=req.user.id;
+        const eventId=req.params.id;
+        if(!mongoose.Schema.ObjectId.isValid(eventId)){
+            return res.status(400).json({
+                success:false,
+                msg:"Invalid event id"
+            })
+        }
+        const event=await Event.findById(eventId);
+        if(!event){
+            res.status(400).json({
+                success:false,
+                msg:"event does not exists"
+            })
+        }
+        if(!userId.toString()!==event.createdBy.toString()){
+            return res.status(400).json({
+                success:false,
+                msg:"you can not update this event"
+            })
+        }
+        
+        const {title,description,eventdate,eventtime,registrationdeadline,location,capacity}=req.body;
+        event.title=title || event.title;
+        event.description=description || event.description;
+        event.eventdate=eventdate || event.eventdate;
+        event.eventtime=eventtime || event.eventtime;
+        event.registrationdeadline=registrationdeadline || event.registrationdeadline;
+        event.location=location || event.location;
+        event.capacity=capacity || event.capacity;
+        
+       event.save();
+       return res.status(200).json({
+        success:true,
+        msg:"event updated successfuly",
+        event
+       })
+    } catch (error) {
+        console.log("error in event updation :",error.message);
+        return res.status(500).json({
+            success:false,
+            msg:"Internal server error"
+        })
+    }
+
+}
+
+//Delete event
+export const deleteEvent=async(req,res)=>{
+try {
+    const userId=req.user.id;
+    const eventId=req.params.id;
+    const event=await Event.findById(eventId);
+    if(!event){
+        return res.status(400).json({
+            success:false,
+            msg:"Event not found"
+        })
+    }
+    if(event.createdBy.toString()!==userId.toString()){
+        return res.status(400).json({
+            success:false,
+            msg:"you are not allowed to delete this event"
+        })
+    }
+
+    const eventt=await Event.findByIdAndDelete(eventId);
+    return res.status(200).json({
+        success:true,
+        msg:"event deleted successfully",
+        event:eventt
+    })
+
+
+} catch (error) {
+    console.log("error in deleting an event:",error.message);
+    return res.status(500).json({
+        success:false,
+        msg:"Internal server error",
+    })
+}
+}
 
 //Now for user 
 
