@@ -96,7 +96,7 @@ export const updateEvent=async(req,res)=>{
     try {
         const userId=req.user.id;
         const eventId=req.params.id;
-        if(!mongoose.Schema.ObjectId.isValid(eventId)){
+        if(!mongoose.Types.ObjectId.isValid(eventId)){
             return res.status(400).json({
                 success:false,
                 msg:"Invalid event id"
@@ -109,7 +109,10 @@ export const updateEvent=async(req,res)=>{
                 msg:"event does not exists"
             })
         }
-        if(!userId.toString()!==event.createdBy.toString()){
+        console.log(userId.toString())
+        console.log(event.createdBy.toString())
+
+        if(userId.toString()!==event.createdBy.toString()){
             return res.status(400).json({
                 success:false,
                 msg:"you can not update this event"

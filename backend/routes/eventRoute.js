@@ -1,7 +1,7 @@
 import express from 'express'
 import protect from '../middlewares/auth.js';
 import { admin } from '../middlewares/admin.js';
-import { createEvent, getAllEvent, getEventById, registerForEvent, unregisterForEvent } from '../controllers/eventController.js';
+import { createEvent, deleteEvent, getAllEvent, getEventById, registerForEvent, unregisterForEvent, updateEvent } from '../controllers/eventController.js';
 
 const router=express.Router();
 
@@ -13,5 +13,7 @@ router.delete("/register/:id",protect,unregisterForEvent);
 
 //only admin can create events
 router.post("/create",protect,admin,createEvent);
+router.delete("/delete/:id",protect,admin,deleteEvent);
+router.put("/update/:id",protect,admin,updateEvent);
 
 export default router;
