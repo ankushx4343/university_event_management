@@ -1,6 +1,7 @@
 import mongoose, { mongo } from "mongoose";
 import Event from "../models/eventModel.js"
 import { createNotification } from "./notificationController.js";
+import userModel from "../models/userModel.js";
 
 //creating event
 export const createEvent=async(req,res)=>{
@@ -196,7 +197,7 @@ export const registerForEvent=async(req,res)=>{
             })
         }
         const event=await Event.findById(eventId);
-
+        const user=await userModel.findById(userId);
         //Already registered for the event or not
         const alreadyRegistered=event.registereduser.includes(userId);
         if (alreadyRegistered) {
@@ -228,6 +229,8 @@ export const registerForEvent=async(req,res)=>{
         event.registereduser.push(userId);
         await event.save();
 
+        user.registeredEvents.push(eventId)
+        await user.save()
         //notificaton create krte hai
        const notification=await createNotification(
             userId,
@@ -267,6 +270,7 @@ export const unregisterForEvent=async(req,res)=>{
         const eventId=req.params.id;
 
         const event=await Event.findById(eventId);
+        const user=await userModel.findById(userId);
         if(!event){
             return res.status(400).json({
                 success:false,
@@ -302,6 +306,13 @@ export const unregisterForEvent=async(req,res)=>{
                 msg:"error in creating notifications"
             })
         }
+        const indexOfEvent=user.registeredEvents.indexOf(eventId)
+        console.log(indexOfEvent);
+        console.log(user.registeredEvents)
+        if(indexOfEvent>-1){
+            user.registeredEvents.splice(indexOfEvent,1);
+        }
+        await user.save();
         return res.status(200).json({
             success:true,
             msg:"successfuly unregistered to the event",
@@ -313,7 +324,8 @@ export const unregisterForEvent=async(req,res)=>{
         console.log(error.message);
         return res.status(500).json({
             success:false,
-            msg:"internal server error"
+            msg:"internal server error",
+            error:error.message
         })
     }
 }

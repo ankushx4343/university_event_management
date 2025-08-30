@@ -1,8 +1,17 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { motion as Motion } from "motion/react"
 import { Calendar,ChevronRight,Clock4,MapPin } from 'lucide-react';
+import { AuthContex } from '../../context/AuthContext';
 
 function Card({event,onClick}) {
+  const[isRegistered,setIsregistered]=useState(false);
+  const{user}=useContext(AuthContex)
+  console.log(event.registereduser)
+  useEffect(()=>{
+  if(event.registereduser.includes(user._id)){
+    setIsregistered(true)
+  }
+  },[])
 
   const formattedDate=new Date(event.eventdate).toLocaleDateString("en-GB",{
     day:"2-digit",
@@ -61,6 +70,16 @@ function Card({event,onClick}) {
                 </div>
               </div>
             </div>
+            {
+              isRegistered?(
+              <div className='w-full bg-gray-300  rounded-xl p-3 px-6 flex justify-between items-center text-2xl font-semibold hover:bg-gray-700 hover:text-white'>
+            <h1>
+                Registered
+            </h1>
+            <div className='flex justify-center'>
+              <ChevronRight/>
+            </div>
+          </div>):(
           <div className='w-full bg-gray-100  rounded-xl p-3 px-6 flex justify-between items-center text-2xl font-semibold hover:bg-blue-400 hover:text-white'>
             <h1>
                 Registration
@@ -68,7 +87,9 @@ function Card({event,onClick}) {
             <div className='flex justify-center'>
               <ChevronRight/>
             </div>
-          </div>
+          </div> )
+            }
+     
 
         </Motion.div>
 
