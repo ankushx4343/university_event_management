@@ -12,35 +12,65 @@ function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [registeredEvents, setRegisteredEvents] = useState([]);
   const { user } = useContext(AuthContex);
-  useEffect(() => {
-    const fetchevents = async () => {
-      try {
-        const res = await api.get("/event/get");
-        console.log(res.data.events);
-        setEvents(res.data.events);
-      } catch (error) {
-        console.log(error.message);
+
+  //fetches events and filter them 
+useEffect(() => {
+  const fetchEvents = async () => {
+    try {
+      const res = await api.get("/event/get");
+      const allEvents = res.data.events;
+      setEvents(allEvents);
+       console.log(user)
+      // Only filter if user and user.registeredEvents exist
+      if (user?.registeredEvents) {
+        console.log("hi")
+        const registered = allEvents.filter(event => user.registeredEvents?.includes(event._id));
+        setRegisteredEvents(registered);
       }
+    } catch (error) {
+      console.log(error.message);
     }
-    fetchevents();
-  }, [])
+  };
 
-  useEffect(() => {
-    if (events.length && user?.registeredEvents) {
-      const filtered = events.filter((event) => user.registeredEvents.includes(event._id))
-      setRegisteredEvents(filtered)
-    }
-  }, [events, user])
-
+  if (user) { // wait for user to exist
+    fetchEvents();
+  }
+}, [user]); // run whenever user becomes available
   const handleCardclick = (event) => {
     console.log(event)
     setSelectedevent(event);
     setIsModalOpen(true)
   }
 
+  //close the modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedevent(null);
+  }
+
+  //helps in showing changes on frontend intantly after user register for an event 
+  const handleRegister=(event)=>{
+    console.log("registered")
+    console.log(registeredEvents)
+    console.log(event)
+    event.registereduser=[...event.registereduser,user._id]
+    setRegisteredEvents((prev)=>{
+      const updated=[...prev,event];
+      console.log("updated inside set:",updated)
+      return updated;
+      })
+  }
+
+  //helps in showing changes on frontend intantly after user unregister for an event 
+  const handleUnregister=(event)=>{
+    console.log("unregistered")
+    console.log(registeredEvents)
+    event.registereduser=event.registereduser.filter((us)=>us!=user._id)
+    setRegisteredEvents((prev)=>prev.filter(ev=>ev.id!==event.id)) 
+    console.log(registeredEvents)
+  }
+    if (!user) {
+    return <p>Loading user data...</p>;
   }
   return (
     <div className='bg-gray-300  w-screen'>
@@ -71,6 +101,7 @@ function Dashboard() {
             <p>No event found</p>
           ) : (
             events.map((event, index) => {
+              console.log(event)
               return <Card key={index} event={event} onClick={handleCardclick}></Card>
             })
           )
@@ -82,6 +113,8 @@ function Dashboard() {
           event={selectedEvent}
           isOpen={isModalOpen}
           onClose={handleCloseModal}
+          onRegister={handleRegister}
+          onUnregister={handleUnregister}
         />
       )}
     </div>

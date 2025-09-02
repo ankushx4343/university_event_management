@@ -6,12 +6,32 @@ import { AuthContex } from '../../context/AuthContext';
 function Card({event,onClick}) {
   const[isRegistered,setIsregistered]=useState(false);
   const{user}=useContext(AuthContex)
-  console.log(event.registereduser)
-  useEffect(()=>{
-  if(event.registereduser.includes(user._id)){
-    setIsregistered(true)
+  
+  useEffect(() => {
+    console.log('Event received in Card:', event);
+    console.log('Event type:', typeof event);
+    
+    // Check if event is an object (not just an ID)
+    if (event && typeof event === 'object' && event._id) {
+      // Check if user is registered for this event
+      if (event.registereduser && Array.isArray(event.registereduser) && user?._id) {
+        const isUserRegistered = event.registereduser.includes(user._id);
+        setIsregistered(isUserRegistered);
+      }
+    } else {
+      console.error('Event is not a valid object:', event);
+    }
+  }, [event, user]);
+
+  // Early return if event is not a valid object
+  if (!event || typeof event !== 'object' || !event._id) {
+    console.error('Invalid event data received:', event);
+    return (
+      <div className='h-[450px] w-[400px] bg-red-100 rounded-2xl px-4 py-2 flex justify-center items-center'>
+        <p className='text-red-600 text-center'>Invalid event data</p>
+      </div>
+    );
   }
-  },[])
 
   const formattedDate=new Date(event.eventdate).toLocaleDateString("en-GB",{
     day:"2-digit",

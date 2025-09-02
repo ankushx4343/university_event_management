@@ -102,7 +102,8 @@ export const login=async(req,res)=>{
                 email:user.email,
                 role:user.role,
                 studentId:user.studentId,
-                department:user.department
+                department:user.department,
+                registeredEvents:user.registeredEvents
             }
         })
 
