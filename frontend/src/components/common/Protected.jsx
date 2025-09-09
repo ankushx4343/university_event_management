@@ -3,6 +3,7 @@ import useAuth from "../../context/useAuth";
 
 export const ProtectedRoute=({children})=>{
     const {user}=useAuth();
+    console.log(user)
     if(!user){
        {console.log(user)}
        return(

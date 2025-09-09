@@ -3,6 +3,7 @@ import useAuth from "../../context/useAuth";
 
 export const AdminRoute=({children})=>{
     const {user}=useAuth();
+    console.log(user)
     if(!user){
         return<Navigate to={"/login"}></Navigate>
     }

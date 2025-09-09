@@ -10,6 +10,7 @@ import { useEffect } from "react";
     const [user,setUser]=useState(null);
     const [loading,setLoading]=useState(true);
     const login=async(userdetails)=>{
+        console.log(userdetails)
         setUser(userdetails);
     }
 
@@ -20,6 +21,7 @@ import { useEffect } from "react";
 
     const fetchuserfromtoken=async(token)=>{
         try {
+            console.log(user)
            console.log(token )
            const response= await api.get("/user/me")
            setUser(response.data.user)

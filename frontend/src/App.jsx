@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Adminpanel from './pages/Adminpanel'
+import Adminpanel from './pages/AdminPannel/Adminpanel'
 import Dashboard from './pages/Dashboard'
 import { ProtectedRoute } from './components/common/Protected'
 import { AdminRoute } from './components/common/AdminRoute'
@@ -16,7 +16,7 @@ function App() {
       <Route path='/register' element={<Register/>}></Route>
       <Route path='/admin' element={
         <AdminRoute>
-          <Adminpanel/>
+          <Adminpanel/>    
         </AdminRoute> 
       }></Route>
       <Route path='/dashboard' element={
