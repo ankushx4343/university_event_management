@@ -7,24 +7,30 @@ import Adminpanel from './pages/AdminPannel/Adminpanel'
 import Dashboard from './pages/Dashboard'
 import { ProtectedRoute } from './components/common/Protected'
 import { AdminRoute } from './components/common/AdminRoute'
+import Header from './components/layout/Header'
 
 function App() {
   return (
-    <Routes>
-      <Route path='/' element={<Home/>}></Route>
-      <Route path='/login' element={<Login/>}></Route>
-      <Route path='/register' element={<Register/>}></Route>
-      <Route path='/admin' element={
-        <AdminRoute>
-          <Adminpanel/>    
-        </AdminRoute> 
-      }></Route>
-      <Route path='/dashboard' element={
-        <ProtectedRoute>
-          <Dashboard/>
-        </ProtectedRoute>
-      }></Route>
-    </Routes>
+    <>
+      <div className='min-h-screen'>
+        <Header/>
+        <Routes>
+          <Route path='/' element={<Home/>}></Route>
+          <Route path='/login' element={<Login/>}></Route>
+          <Route path='/register' element={<Register/>}></Route>
+          <Route path='/admin' element={
+            <AdminRoute>
+              <Adminpanel/>    
+            </AdminRoute> 
+          }></Route>
+          <Route path='/dashboard' element={
+            <ProtectedRoute>
+              <Dashboard/>
+            </ProtectedRoute>
+          }></Route>
+        </Routes>
+      </div>
+    </>
   )
 }
 

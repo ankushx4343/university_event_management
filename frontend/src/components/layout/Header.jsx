@@ -1,13 +1,21 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { LogOut } from 'lucide-react';
 import useAuth from '../../context/useAuth.js'
 
 function Header() {
     const {user,logout}=useAuth();
-  
+    const location=useLocation()
+    const navlinks=[
+      {path:"/dashboard",label:"Dashboard",icon: "📊"},
+      {path:"/about",label:"About",icon: "📋"},
+      {path:"/events",label:"Events",icon: "🎯"},
+      {path:"/contacts",label:"Contacts",icon: "📞"},
+    ]
     const handleLogout=()=>{
      logout()
     }
+
   return (
     <div className='flex justify-between items-center bg-zinc-100 top-0 px-10 py-2  shadow-md h-16'>
           <Link to={"/home"}>
@@ -15,10 +23,39 @@ function Header() {
           </Link>
       <div className='flex gap-10'>  
           <div className='flex gap-8 justify-center items-center text-xl'>
-            <Link to={"/dashboard"}>Dashboard</Link>
-            <Link to={"/about"}>About</Link>
-            <Link to={"/events"}>Events</Link>
-            <Link to={"/contacts"}>Contacts</Link>
+
+            {
+              navlinks.map((link)=>{
+                return(
+            <Link 
+              key={link.path}
+              to={link.path}
+              className={location.pathname===link.path? "text-blue-600 font-semibold bg-blue-100 px-3 py-1 rounded-lg  border-blue-600": "text-gray-700 hover:text-blue-500 hover:bg-gray-200 px-3 py-1 rounded-lg transition-all duration-200"}>
+                <span>
+                  {link.icon}
+                </span>
+
+                <span>
+                  {link.label}
+                </span>
+            </Link>
+                )
+              })
+            }
+            {
+              user.role==="admin"&&(
+            <Link 
+              to={"/admin"}
+              className={location.pathname==="/admin"? "text-blue-600 font-semibold bg-blue-100 px-3 py-1 rounded-lg  border-blue-600": "text-gray-700 hover:text-blue-500 hover:bg-gray-200 px-3 py-1 rounded-lg transition-all duration-200"}>
+              <span>
+                ⚙️
+              </span>
+              <span>
+                Admin
+              </span>
+            </Link>
+              )
+            }
           </div>
 
           <div className='flex gap-4'>
@@ -33,7 +70,8 @@ function Header() {
                 </>
             ):(
                 <>
-                 <button onClick={handleLogout} className='px-4 py-2 bg-red-500 hover:bg-red-600 rounded'>
+                 <button onClick={handleLogout} className='transition-all ease-initial duration-300 px-4 py-2 bg-gray-700 hover:bg-red-600 rounded flex gap-2 text-white font-bold '>
+                    <LogOut/>
                     logout
                  </button>
                 </>

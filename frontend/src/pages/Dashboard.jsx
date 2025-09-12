@@ -74,7 +74,6 @@ useEffect(() => {
   }
   return (
     <div className='bg-gray-300  w-screen'>
-      <Header />
       <div className='mt-5 font-sans'>
         <div className='flex flex-col justify-center items-center font-bold text-3xl'>
           <h1>Your registered events</h1>
