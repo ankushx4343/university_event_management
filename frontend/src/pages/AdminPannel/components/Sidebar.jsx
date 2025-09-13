@@ -2,8 +2,17 @@ import React from 'react'
 import { Building2 } from 'lucide-react';
 import { Users } from 'lucide-react';
 import { Goal } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 
 function Sidebar() {
+    const sideLinks=[
+         {path:"/admin",label:"Dashboard",icon: Building2},
+         {path:"/admin/usermanagement",label:"User Management",icon: Users},
+         {path:"/admin/eventmanagement",label:"Event Management",icon: Goal},
+    ]
+  const location=useLocation();
+  console.log(location.pathname)
   return (
     <div className='bg-white w-full h-full '>
         <div className='pt-20 flex flex-col justify-center align-center'>
@@ -12,18 +21,21 @@ function Sidebar() {
         </div>
         <div className='mt-4'>
             <div className='flex flex-col w-full overflow-clip gap-2'>
-                <div className='flex gap-6 items-center transition-all duration-300 hover:translate-x-2 ease-in-out hover:bg-blue-500 hover:text-white px-10 py-6  ml-2   '>
-                    <Building2 className='scale-105' />
-                    <h1 className='text-xl'>Dashboard</h1>
-                </div>
-                <div className='flex gap-6 items-center transition-all duration-300 hover:translate-x-2 ease-in-out hover:bg-blue-500 hover:text-white px-10 py-6  ml-2   '>
-                    <Users className='scale-105' />
-                    <h1 className='text-xl'>User Management</h1>
-                </div>
-                <div className='flex gap-6 items-center transition-all duration-300 hover:translate-x-2 ease-in-out hover:bg-blue-500 hover:text-white px-10 py-6  ml-2   '>
-                    <Goal className='scale-105' />
-                    <h1 className='text-xl'>Event Management</h1>
-                </div>
+                {sideLinks.map((link)=>{
+                    const Icon=link.icon
+                    const isActive = location.pathname === link.path;
+                    return(
+                <Link to={link.path}
+                        className={`flex gap-6 items-center transition-all duration-300 ease-in-out ml-2 px-10 py-6 
+                            ${isActive
+                                ?'translate-x-2 bg-blue-500 text-white'
+                                :'hover:translate-x-2  hover:bg-blue-500 hover:text-white'}`
+                            }>
+                    <Icon className='scale-105' />
+                    <h1 className='text-xl'>{link.label}</h1>
+                </Link>
+                    )
+                })}
             </div>
         </div>
     </div>

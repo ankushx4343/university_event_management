@@ -8,6 +8,9 @@ import Dashboard from './pages/Dashboard'
 import { ProtectedRoute } from './components/common/Protected'
 import { AdminRoute } from './components/common/AdminRoute'
 import Header from './components/layout/Header'
+import AdminDashboard from './pages/AdminPannel/components/AdminDashboard'
+import Eventmanagement from './pages/AdminPannel/components/Eventmanagement'
+import Usermanagement from './pages/AdminPannel/components/Usermanagement'
 
 function App() {
   return (
@@ -22,7 +25,11 @@ function App() {
             <AdminRoute>
               <Adminpanel/>    
             </AdminRoute> 
-          }></Route>
+          }>
+              <Route index element={<AdminDashboard/>}></Route>
+              <Route path='eventmanagement' element={<Eventmanagement/>}></Route>
+              <Route path='usermanagement' element={<Usermanagement/>}></Route>
+          </Route>
           <Route path='/dashboard' element={
             <ProtectedRoute>
               <Dashboard/>
