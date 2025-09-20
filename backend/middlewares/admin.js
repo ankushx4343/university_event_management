@@ -17,6 +17,6 @@ export const admin=async(req,res,next)=>{
         }
         next(); //if user is admin, proceed to the next middleware or route handler
     } catch (error) {
-        
+        console.log(error.message)
     }
 } 

@@ -11,6 +11,7 @@ const protect=async(req,res,next)=>{
             })
         }
         let token=req.headers.authorization;
+        console.log(token)
         if(token){
             token=token.split(" ")[1];
             console.log(token);
@@ -21,7 +22,7 @@ const protect=async(req,res,next)=>{
                 })
             }
 
-            console.log(decoded);
+            console.log("decode",decoded);
 
             const user=await User.findById(decoded.id)
 
@@ -32,7 +33,7 @@ const protect=async(req,res,next)=>{
             }
             req.user=user; //attach user to request object
             console.log(user);
-            next();
+           return next();
         }
         console.log("cannot access the events")
     } catch (error) {

@@ -181,6 +181,53 @@ try {
 }
 }
 
+//count upcoming events
+export const countUpcomingEvents=async(req,res)=>{
+    try {
+        const date=new Date();
+        const count=await Event.countDocuments({
+            eventdate:{$gt:date}
+        })
+        res.status(200).json({
+            success:true,
+            msg:"successfully fetched the count of upcoming events",
+            count:count
+        })
+    } catch (error) {
+        console.log("error in counting the events",error.message)
+        res.status(500).json({
+            success:false,
+            msg:"Internal sever error",
+        })
+    }
+}
+
+//count todays events
+export const countTodaysEvents=async(req,res)=>{
+    try {
+        const date=new Date();
+        const startOfDay=new Date(date.setHours(0,0,0,0));
+        const endOfDay=new Date(date.setHours(23,59,59,999))
+        const count=await Event.countDocuments({
+            eventdate:{
+                $gte:startOfDay,
+                $lt:endOfDay
+            }
+        })
+        res.status(200).json({
+            success:true,
+            msg:"today events fetched successfully",
+            count:count
+        })
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            msg:"internal server error",
+            error:error.message
+        })
+    }
+}
+
 //Now for user 
 
 //registerForEvent

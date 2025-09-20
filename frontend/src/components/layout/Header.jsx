@@ -43,7 +43,7 @@ function Header() {
               })
             }
             {
-              user.role==="admin"&&(
+              user?.role==="admin"&&(
             <Link 
               to={"/admin"}
               className={location.pathname==="/admin"? "text-blue-600 font-semibold bg-blue-100 px-3 py-1 rounded-lg  border-blue-600": "text-gray-700 hover:text-blue-500 hover:bg-gray-200 px-3 py-1 rounded-lg transition-all duration-200"}>
