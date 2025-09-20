@@ -1,8 +1,35 @@
 import React from 'react'
 import { motion as Motion } from "motion/react"
 import { Users } from 'lucide-react';
+import { useEffect } from 'react';
+import api from '../../../services/api';
+import { useState } from 'react';
 
 function AdminDashboard() {
+  const [Eventcount,seteventCount]=useState(0);
+  const [todayEventscount,setTodayeventcount]=useState(0);
+  const [totalUser,SetTotalUser]=useState(0)
+
+  useEffect(()=>{
+    const getEventsCount=async()=>{
+      const res=await api.get("/event/count/activeevents");
+      console.log(res.data.count);
+      seteventCount(res.data.count);
+    }
+    const getTodayEventCount=async()=>{
+      const res=await api.get("/event/count/todayevent");
+      console.log(res.data.count);
+      setTodayeventcount(res.data.count);
+    }
+    const getTotalUsers=async()=>{
+      const res=await api.get("/user/count/user");
+      console.log(res.data.count);
+      SetTotalUser(res.data.count)
+    }
+    getTotalUsers();
+    getEventsCount();
+    getTodayEventCount();
+  },[])
   return (
     <div className='h-screen min-w-full p-10 '>
       <div className='min-h-[95%] w-[90%] h-fit  bg-white rounded-2xl mx-auto pt-10'>
@@ -29,7 +56,7 @@ function AdminDashboard() {
               </div>
             </div>
             <div>
-              <h1 className='text-4xl font-bold  ml-2'>123</h1>
+              <h1 className='text-4xl font-bold  ml-2'>{Eventcount}</h1>
             </div>
             <div className='text-gray-500 text-xl'>
               Active Events
@@ -50,7 +77,7 @@ function AdminDashboard() {
               </div>
             </div>
             <div>
-              <h1 className='text-4xl font-bold  ml-2'>248</h1>
+              <h1 className='text-4xl font-bold  ml-2'>{totalUser}</h1>
             </div>
             <div className='text-gray-500 text-xl'>
               Toatal users
@@ -71,7 +98,7 @@ function AdminDashboard() {
               </div>
             </div>
             <div>
-              <h1 className='text-4xl font-bold  ml-2'>3</h1>
+              <h1 className='text-4xl font-bold  ml-2'>{todayEventscount}</h1>
             </div>
             <div className='text-gray-500 text-xl'>
               Today Events

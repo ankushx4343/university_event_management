@@ -1,10 +1,27 @@
 import express from "express";
 import User from "../models/userModel.js";
+import jwt from "jsonwebtoken"
 
 
 
 //get current user details
 export const getMe=async(req,res)=>{
+    let token=req.body.token;
+    if(!token){
+        res.status(404).json({
+            success:false,
+            msg:"not authorized"
+        })
+    }
+    token=token.split(" ")[1];
+    console.log(token);
+    const decoded=jwt.verify(token,process.env.JWT_SECRET);
+    if(!decoded){
+        res.status(401).json({
+            success:false,
+            
+        })
+    }
     res.json({
         success:true,
         user:req.user   
@@ -172,3 +189,11 @@ export const deleteUserById=async(req,res)=>{
     }
 }   
 
+//get total user count
+export const countUser=async(req,res)=>{
+    const totaluser=await User.countDocuments()
+    res.status(200).json({
+        success:true,
+        count:totaluser
+    })
+}
