@@ -5,7 +5,7 @@ import { admin } from "../middlewares/admin.js";
 
 const router=express.Router();
 //user controlled routes
-router.get("/me",getMe); //checked
+router.get("/me",protect,getMe); //checked
 router.post("/update",protect,updateME); //checked
 router.post("/change-pass",protect,changePassword);
 router.delete("/delete",protect,deleteMe);

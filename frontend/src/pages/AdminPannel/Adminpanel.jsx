@@ -8,7 +8,7 @@ function Adminpanel() {
       <div className='col-span-1 h-full bg-amber-300'>
         <Sidebar/>
       </div>
-      <div className='col-span-4 h-full bg-blue-500 rounded-8xl'>
+      <div className='col-span-4 h-full bg-blue-500 rounded-8xl flex justify-center items-center '>
         <Outlet/>
       </div>
     </div>

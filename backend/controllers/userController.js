@@ -6,7 +6,10 @@ import jwt from "jsonwebtoken"
 
 //get current user details
 export const getMe=async(req,res)=>{
-    let token=req.body.token;
+    const authHeader = req.headers['authorization'];
+    console.log(" Headers",authHeader)
+    let token=authHeader;
+    console.log(token)
     if(!token){
         res.status(404).json({
             success:false,
@@ -19,7 +22,6 @@ export const getMe=async(req,res)=>{
     if(!decoded){
         res.status(401).json({
             success:false,
-            
         })
     }
     res.json({
