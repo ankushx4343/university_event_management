@@ -1,29 +1,54 @@
 import React, { useState } from 'react'
 import { Calendar1Icon, Captions, Clock2, MapPin, SquareMinus, Users2, X } from 'lucide-react';
+import toast, { Toaster } from 'react-hot-toast';
+import api from '../../../../services/api';
 
 function AddEventModal({setShowmodal}) {
-    const[title,setTitle]=useState("")
-    const[description,setDescription]=useState("")
-    const[date,setDate]=useState("")
-    const[time,setTime]=useState("")
-    const[deadline,setDeadline]=useState("")
-    const[location,setLocation]=useState("")
-    const[capacity,setCapacity]=useState(0)
+
+    const [formdata,setformData]=useState({
+        title:"",
+        description:"",
+        date:"",
+        time:"",
+        deadline:"",
+        location:"",
+        capacity:0
+    })
+
+    const handleChange=(e)=>{
+        const {name,value}=e.target
+        setformData((prev)=>({
+            ...prev,
+            [name]:value
+        }))
+    }
    
-     const handleSubmit=()=>{
-        console.log("clicked")
-        console.log(title)
-        console.log(description)
-        console.log(date)
-        console.log(time)
-        console.log(deadline)
-        console.log(location)
-        console.log(capacity)
+     const handleSubmit=async()=>{
+        console.log(formdata)
+        try {
+                const response=await api.post("/event/create",{
+                "title":formdata.title,
+                "description":formdata.description,
+                "eventdate":formdata.date,
+                "eventtime":formdata.time,
+                "registrationdeadline":formdata.deadline,
+                "location":formdata.location,
+                "capacity":formdata.capacity
+                 })
+                //  console.log(response)
+                if(response.data.success){
+                    toast.success("Event created")
+                }else{
+                    toast.error(response)
+                }
+        } catch (error) {
+            toast.error("error in event creating")
+        }
+
      }
 
   return (
-    <div className='fixed inset-0 z-30 bg-black/40 backdrop-blur-2xl absolute top-0  left-0 flex justify-center items-center font-mono tracking-tight'>
-        
+    <div className='fixed inset-0 z-30 bg-black/40 backdrop-blur-2xl  top-0  left-0 flex justify-center items-center font-mono tracking-tight'>
         <div className='bg-black/40 min-h-[80%] w-[40%] rounded-2xl backdrop-blur-3xl py-10 px-4'>
         <X 
             onClick={()=>setShowmodal(false)}
@@ -36,8 +61,9 @@ function AddEventModal({setShowmodal}) {
                     <SquareMinus className='pl-3 absolute left-0 scale-190'/> 
                     <input 
                         id='title'
-                        value={title}
-                        onChange={(e)=>setTitle(e.target.value)}
+                        name='title'
+                        value={formdata.title}
+                        onChange={handleChange}
                         type='text'
                         placeholder='Enter title of the event'
                         className='rounded-md pl-16 px-4 h-full w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all ease-in-out duration-200 hover:bg-/10 flex items-center'
@@ -54,9 +80,10 @@ function AddEventModal({setShowmodal}) {
                     <Captions className='pl-3 absolute left-0 scale-190'/> 
                     <input 
                         id='description'
+                        name='description'
                         type='text'
-                        value={description}
-                        onChange={(e)=>setDescription(e.target.value)}
+                        value={formdata.description}
+                        onChange={handleChange}
                         placeholder='Enter description for the event'
                         className='rounded-md pl-16 px-4 h-full w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all ease-in-out duration-200 hover:bg-/10 flex items-center'
                         ></input>
@@ -72,9 +99,10 @@ function AddEventModal({setShowmodal}) {
                     <Calendar1Icon className='pl-3 absolute left-0 scale-190'/> 
                     <input 
                         id='eventdate'
+                        name='date'
                         type='date'
-                        value={date}
-                        onChange={(e)=>setDate(e.target.value)}
+                        value={formdata.date}
+                        onChange={handleChange}
                         placeholder='Enter title of the event'
                         className='rounded-md pl-16 px-4 h-full w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all ease-in-out duration-200 hover:bg-/10 '
                         ></input>
@@ -91,9 +119,10 @@ function AddEventModal({setShowmodal}) {
                     <Clock2 className='pl-3 absolute left-0 scale-190'/> 
                     <input 
                         id='time'
+                        name='time'
                         type='time'
-                        value={time}
-                        onChange={(e)=>setTime(e.target.value)}
+                        value={formdata.time}
+                        onChange={handleChange}
                         placeholder='Enter time for event'
                         className='rounded-md pl-16 px-4 h-full w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all ease-in-out duration-200 hover:bg-/10  '
                         ></input>
@@ -106,15 +135,16 @@ function AddEventModal({setShowmodal}) {
                 <label htmlFor="deadline" className="text-2xl ">
                     deadline
                 </label>
-                <div className='relative backdrop-blur-6xl bg-white/20 rounded-md h-14 cursor-pointer  focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all ease-in-out duration-200 hover:bg-white/40 flex items-center'>      
+                <div className='relative backdrop-blur-6xl bg-white/20 rounded-md h-14 cursor-pointer  focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all ease-in-out duration-200 hover:bg-white/40  flex items-center'>      
                     <Calendar1Icon className='pl-3 absolute left-0 scale-190'/> 
                     <input 
                         id='deadline'
+                        name='deadline'
                         type='date'
-                        value={deadline}
-                        onChange={(e)=>setDeadline(e.target.value)}
+                        value={formdata.deadline}
+                        onChange={handleChange}
                         placeholder='Enter title of the event'
-                        className='rounded-md pl-16 px-4 h-full w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all ease-in-out duration-200 hover:bg-/10 flex items-center'
+                        className='rounded-md pl-16 px-4 h-full w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all ease-in-out duration-200 hover:bg-/10'
                         ></input>
                 </div>
             </div>
@@ -129,9 +159,10 @@ function AddEventModal({setShowmodal}) {
                     <MapPin className='pl-3 absolute left-0 scale-190'/> 
                     <input 
                         id='location'
+                        name='location'
                         type='text'
-                        value={location}
-                        onChange={(e)=>setLocation(e.target.value)}
+                        value={formdata.location}
+                        onChange={handleChange}
                         placeholder='enter location for event'
                         className='rounded-md pl-16 px-4 h-full w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all ease-in-out duration-200 hover:bg-/10 flex items-center'
                         ></input>
@@ -148,9 +179,10 @@ function AddEventModal({setShowmodal}) {
                     <Users2 className='pl-3 absolute left-0 scale-190'/> 
                     <input 
                         id='capacity'
+                        name='capacity'
                         type='number'
-                        value={capacity}
-                        onChange={(e)=>setCapacity(e.target.value)}
+                        value={formdata.capacity}
+                        onChange={handleChange}
                         placeholder='Enter title of the event'
                         className='rounded-md pl-16 px-4 h-full w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all ease-in-out duration-200 hover:bg-/10 flex items-center'
                         ></input>

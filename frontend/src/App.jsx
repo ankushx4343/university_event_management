@@ -11,10 +11,12 @@ import Header from './components/layout/Header'
 import AdminDashboard from './pages/AdminPannel/components/AdminDashboard'
 import Eventmanagement from './pages/AdminPannel/components/Eventmanagement'
 import Usermanagement from './pages/AdminPannel/components/Usermanagement'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   return (
     <>
+    <Toaster/>
       <div className='min-h-screen'>
         <Header/>
         <Routes>
