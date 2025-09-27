@@ -17,7 +17,7 @@ function Header() {
     }
 
   return (
-    <div className='flex justify-between items-center bg-zinc-100 top-0 px-10 py-2  shadow-md h-16'>
+    <div className='flex fixed justify-between items-center bg-zinc-100 top-0 px-10 py-2  shadow-md h-16'>
           <Link to={"/home"}>
             <div className='text-2xl font-bold uppercase font-sans'>university</div>
           </Link>

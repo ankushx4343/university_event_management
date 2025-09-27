@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Calendar, Clock1, Plus } from 'lucide-react';
 import { CalendarCheck } from 'lucide-react';
 import AddEventModal from './modals/AddEventModal';
+import EventInfo from './Additional/EventInfo';
 
 function Eventmanagement() {
   const[showModal,setShowmodal]=useState(false);
@@ -74,6 +75,7 @@ function Eventmanagement() {
 
         </div>
       </div>
+      <EventInfo/>
     </div>
   )
 }
