@@ -48,7 +48,7 @@ function AddEventModal({setShowmodal}) {
      }
 
   return (
-    <div className='fixed inset-0 z-30 bg-black/40 backdrop-blur-2xl  top-0  left-0 flex justify-center items-center font-mono tracking-tight'>
+    <div className='fixed inset-0 z-30 bg-black/40 backdrop-blur-md  top-0  left-0 flex justify-center items-center font-mono tracking-tight'>
         <div className='bg-black/40 min-h-[80%] w-[40%] rounded-2xl backdrop-blur-3xl py-10 px-4'>
         <X 
             onClick={()=>setShowmodal(false)}

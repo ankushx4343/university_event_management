@@ -1,17 +1,40 @@
-import { Calendar1, Clock, MapPin, User2, Users } from 'lucide-react'
-import React from 'react'
+import { Calendar1, Clock, Edit, FastForward, MapPin, Trash2, User2, Users } from 'lucide-react'
+import React, { useState } from 'react'
+import api from '../../../../services/api'
+import DeleteEventModal from '../modals/DeleteEventModal'
+import toast from 'react-hot-toast';
 
-function Infocard({ event }) {
-    console.log(event)
-    if(!event){
-        return(
+function Infocard({ event}) {
+    const [showdeletemodal,setShowdeletemodal]=useState(false);
+    const [loading,setLoading]=useState(false)
+    const handleClick=()=>{
+        setShowdeletemodal(true)
+    }
+    const onClose=()=>{
+        setShowdeletemodal(false);
+    }
+    const onConfirmDelete=async()=>{
+        try {
+            setLoading(true);
+            const response=await api.delete(`/event/delete/${event.id}`)
+            setLoading(false)
+            toast.success("event deleted")
+        } catch (error) {
+            toast.error("error in deleting")
+        }finally{
+            setLoading(false)
+            onClose
+        }
+    }
+    if (!event) {
+        return (
             <div>
                 no event found
             </div>
         )
     }
     return (
-        <div className='w-[90%] bg-white mt-5 p-5 rounded-2xl flex flex-col gap-2 shadow shadow-2xl'>
+        <div className='w-[90%] bg-white mt-5 p-5 rounded-2xl flex flex-col gap-2 shadow shadow-2xl relative'>
             <div className='flex gap-4 items-center'>
                 <h1 className='text-2xl font-semibold'>{event.title}</h1>
                 <div className='text-green-800 bg-green-200 font-semibold px-2 py-1  rounded-2xl'>upcoming</div>
@@ -35,6 +58,22 @@ function Infocard({ event }) {
                 <div className='text-xl'>{event?.registereduser?.length}/{event.capacity}</div>
             </div>
 
+            {/* edit and delete */}
+
+            <div className='absolute top-5  right-3 flex items-center text-gray-500 gap-5 pr-4'>
+                <div className='text-m hover:cursor-pointer'>
+                    <Edit />
+                </div>
+                <div className='text-m hover:cursor-pointer'
+                     onClick={handleClick}
+                     >
+                    <Trash2/>
+                </div>
+            </div>
+            {
+                showdeletemodal &&
+            <DeleteEventModal onClose={onClose} isOpen={showdeletemodal} loading={loading} evetTitle={event.title} onConfirmDelete={onConfirmDelete}/>
+            }
         </div>
     )
 }

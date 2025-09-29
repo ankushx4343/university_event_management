@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react'
 import useAuth from '../../../../context/useAuth';
 import api from '../../../../services/api';
 import Infocard from './Infocard';
+import DeleteEventModal from '../modals/DeleteEventModal';
 
-function EventInfo() {
+function EventInfo({setShowdeletemodal,setEventtodelete}) {
     const { user } = useAuth();
     const [activeTab, setactiveTab] = useState("all");
-    const [showdeletemodal, setShowdeletemodal] = useState(false);
-    const [eventtodelete, setEventtodelete] = useState(null);
     const [events, setEvents] = useState([    {
       id: 1,
       title: "Tech Conference 2024",
@@ -21,8 +20,7 @@ function EventInfo() {
       createdBy: "admin",
       createdAt: "2024-10-01"
     },])
-    useEffect(() => {
-        const fetchEvents = async () => {
+            const fetchEvents = async () => {
             try {
                 const res = await api.get("/event/get");
                 const allEvents = res.data.events;
@@ -32,6 +30,7 @@ function EventInfo() {
                 console.log(error.message);
             }
         };
+    useEffect(() => {
         fetchEvents();
     }, [])
     
@@ -72,9 +71,12 @@ function EventInfo() {
                     </button>
                 ))}
             </div>
-            
             {filterEvents.map((event)=>(
-                <Infocard event={event}/>
+                <Infocard 
+                    event={event} 
+                    setShowdeletemodal={setShowdeletemodal} 
+                    setEventtodelete={setEventtodelete}
+                    fetchEvents={fetchEvents}/>
             ))}
         </div>
     )

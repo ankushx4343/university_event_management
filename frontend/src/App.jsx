@@ -17,7 +17,7 @@ function App() {
   return (
     <>
     <Toaster/>
-      <div className='min-h-screen'>
+      <div className='min-h-screen pt-12'>
         <Header/>
         <Routes>
           <Route path='/' element={<Home/>}></Route>

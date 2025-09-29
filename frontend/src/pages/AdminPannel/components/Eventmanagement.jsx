@@ -3,10 +3,12 @@ import { Calendar, Clock1, Plus } from 'lucide-react';
 import { CalendarCheck } from 'lucide-react';
 import AddEventModal from './modals/AddEventModal';
 import EventInfo from './Additional/EventInfo';
+import DeleteEventModal from './modals/DeleteEventModal';
 
 function Eventmanagement() {
   const[showModal,setShowmodal]=useState(false);
   return (
+    <>
     <div className='w-[95%] min-h-[95%] bg-white rounded-2xl flex flex-col items-center '>
       {
         showModal &&
@@ -77,6 +79,8 @@ function Eventmanagement() {
       </div>
       <EventInfo/>
     </div>
+
+      </>
   )
 }
 
