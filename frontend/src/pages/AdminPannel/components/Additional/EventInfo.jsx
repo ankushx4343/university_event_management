@@ -4,32 +4,11 @@ import api from '../../../../services/api';
 import Infocard from './Infocard';
 import DeleteEventModal from '../modals/DeleteEventModal';
 
-function EventInfo({setShowdeletemodal,setEventtodelete}) {
+function EventInfo({setShowdeletemodal,setEventtodelete,fetchEvents,events}) {
     const { user } = useAuth();
     const [activeTab, setactiveTab] = useState("all");
-    const [events, setEvents] = useState([    {
-      id: 1,
-      title: "Tech Conference 2024",
-      description: "Annual technology conference featuring latest innovations",
-      date: "2024-11-15",
-      time: "09:00",
-      location: "Main Auditorium",
-      capacity: 500,
-      registrations: 234,
-      status: "upcoming",
-      createdBy: "admin",
-      createdAt: "2024-10-01"
-    },])
-            const fetchEvents = async () => {
-            try {
-                const res = await api.get("/event/get");
-                const allEvents = res.data.events;
-                console.log(allEvents)
-                setEvents(allEvents);
-            } catch (error) {
-                console.log(error.message);
-            }
-        };
+
+
     useEffect(() => {
         fetchEvents();
     }, [])

@@ -3,8 +3,8 @@ import { Calendar1Icon, Captions, Clock2, MapPin, SquareMinus, Users2, X } from 
 import toast, { Toaster } from 'react-hot-toast';
 import api from '../../../../services/api';
 
-function AddEventModal({setShowmodal}) {
-
+function AddEventModal({setShowmodal,fetchEvents}) {
+    const[loading,setLoading]=useState(false);
     const [formdata,setformData]=useState({
         title:"",
         description:"",
@@ -25,7 +25,8 @@ function AddEventModal({setShowmodal}) {
    
      const handleSubmit=async()=>{
         console.log(formdata)
-        try {
+        try {   
+               setLoading(true);
                 const response=await api.post("/event/create",{
                 "title":formdata.title,
                 "description":formdata.description,
@@ -38,11 +39,15 @@ function AddEventModal({setShowmodal}) {
                 //  console.log(response)
                 if(response.data.success){
                     toast.success("Event created")
+                    
                 }else{
                     toast.error(response)
                 }
         } catch (error) {
-            toast.error("error in event creating")
+            toast.error(error.response.data.msg)
+        }finally{
+            setLoading(false)
+            fetchEvents();
         }
 
      }
@@ -190,7 +195,7 @@ function AddEventModal({setShowmodal}) {
             </div>
 
             <button onClick={handleSubmit} className='bg-blue-500/50 backdrop-blur-3xl h-10 px-5 rounded-2xl text-white font-semibold text-2xl mt-5'>
-                Submit
+                {loading?"Submiting.....":"submit"}
             </button>
         </div>
     </div>

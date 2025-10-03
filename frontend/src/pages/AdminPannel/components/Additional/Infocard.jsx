@@ -3,10 +3,15 @@ import React, { useState } from 'react'
 import api from '../../../../services/api'
 import DeleteEventModal from '../modals/DeleteEventModal'
 import toast from 'react-hot-toast';
+import useAuth from '../../../../context/useAuth';
 
-function Infocard({ event}) {
+function Infocard({event,fetchEvents}) {
     const [showdeletemodal,setShowdeletemodal]=useState(false);
     const [loading,setLoading]=useState(false)
+    const {user}=useAuth();
+    const isCreatedByYou=user._id==event.createdBy
+    const isComing=new Date(event.eventdate)>=new Date();
+    console.log(event)
     const handleClick=()=>{
         setShowdeletemodal(true)
     }
@@ -18,6 +23,7 @@ function Infocard({ event}) {
             setLoading(true);
             const response=await api.delete(`/event/delete/${event.id}`)
             setLoading(false)
+            fetchEvents()
             toast.success("event deleted")
         } catch (error) {
             toast.error("error in deleting")
@@ -34,11 +40,15 @@ function Infocard({ event}) {
         )
     }
     return (
-        <div className='w-[90%] bg-white mt-5 p-5 rounded-2xl flex flex-col gap-2 shadow shadow-2xl relative'>
+        <div className='w-[90%] bg-white mt-5 p-5 rounded-2xl flex flex-col gap-2    shadow-2xl relative'>
             <div className='flex gap-4 items-center'>
                 <h1 className='text-2xl font-semibold'>{event.title}</h1>
+                {isComing &&
                 <div className='text-green-800 bg-green-200 font-semibold px-2 py-1  rounded-2xl'>upcoming</div>
+                }
+                {isCreatedByYou &&  
                 <div className='text-blue-800 bg-blue-200 font-semibold px-2 py-1  rounded-2xl'>created by you</div>
+                }
             </div>
             <h2 className='text-xl text-gray-700'>{event.description}</h2>
             <div className='flex items-center gap-4 text-gray-500'>
