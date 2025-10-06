@@ -4,6 +4,7 @@ import { changePassword, countUser, deleteMe, deleteUserById, getAllUsers, getMe
 import { admin } from "../middlewares/admin.js";
 
 const router=express.Router();
+
 //user controlled routes
 router.get("/me",protect,getMe); //checked
 router.post("/update",protect,updateME); //checked

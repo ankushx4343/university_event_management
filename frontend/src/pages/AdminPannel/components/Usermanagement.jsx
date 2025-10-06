@@ -4,6 +4,8 @@ import api from '../../../services/api'
 import toast from 'react-hot-toast';
 import Userinfocard from './Additional/Userinfocard';
 import useAuth from '../../../context/useAuth';
+import DeleteUserModal from './modals/DeleteUserModal';
+import UserInfo from './modals/UserInfo';
 
 function Usermanagement() {
 
@@ -11,25 +13,41 @@ function Usermanagement() {
   const [usersCount, setUserscount] = useState(0);
   const [adminCount, setAdminCount] = useState(0);
   const { user } = useAuth()
+  const [showModal,setShowModal]=useState(false)
+  const [loading,setLoading]=useState(false)
+  const [userTodelete,setUsertodelete]=useState(null)
   console.log(user._id)
 
-  const handleDelete = async (id) => {
+  const onClose=()=>{
+    setUsertodelete(null)
+    setShowModal(false);
+
+  }
+  const handleClick=(id)=>{
+    setUsertodelete(id)
+    setShowModal(true)
+  }
+  const handleDelete = async () => {
     try {
-      await api.delete(`/user/${id}`)
+      setLoading(true)
+      await api.delete(`/user/${userTodelete}`)
       toast.success("user deleted ")
       //update users
-      setUsers((prev) => prev.filter(user => user._id !== id));
+      setUsers((prev) => prev.filter(user => user._id !== userTodelete));
       //update count 
       setUserscount((prev) => prev - 1)
 
       // Decrease admin count if deleted user was admin
-      const deletedUser = users.find(user => user._id === id);
+      const deletedUser = users.find(user => user._id === userTodelete);
       if (deletedUser?.role === "admin") {
         setAdminCount((prev) => prev - 1);
       }
     } catch (error) {
       console.log(error);
       toast(error)
+    }finally{
+      setLoading(false)
+      onClose()
     }
   }
   useEffect(() => {
@@ -50,6 +68,8 @@ function Usermanagement() {
 
   return (
     <div className='w-[95%] min-h-full bg-white flex flex-col items-center'>
+      <UserInfo/>
+      <DeleteUserModal onConfirmdelete={handleDelete} onClose={onClose} isOpen={showModal} loading={loading}/>
       <div className='w-[90%] min-h-[70%] shadow-2xl mt-10 px-10 rounded-2xl pb-10'>
         <div className='flex justify-between  pt-5 '>
           <div className='flex flex-col gap-4'>
@@ -99,7 +119,7 @@ function Usermanagement() {
         {
           users.map((user) => {
             return (
-              <Userinfocard user={user} handleDelete={handleDelete} />
+              <Userinfocard user={user} handleDelete={handleClick} />
             )
           })
         }

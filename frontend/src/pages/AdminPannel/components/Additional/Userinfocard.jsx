@@ -1,7 +1,9 @@
-import { GraduationCap, ShieldCheckIcon, Trash2 } from 'lucide-react'
+import { GraduationCap, LucideMoreVertical, ShieldCheckIcon, Trash2 } from 'lucide-react'
 import React from 'react'
 
-function Userinfocard({ user , handleDelete}) {
+function Userinfocard({ user, handleDelete }) {
+
+
     return (
         <div className='bg-white rounded-2xl shadow-2xl px-4 py-4'>
             <div className='flex flex-col gap-3 relative'>
@@ -25,10 +27,18 @@ function Userinfocard({ user , handleDelete}) {
 
             {/* sepration line */}
             <div className='h-[1px] bg-gray-500 my-5'></div>
-            <div>
-                <div 
-                onClick={()=>handleDelete(user._id)}
-                className='bg-red-700/50 hover:bg-red-700 hover:cursor-pointer flex  items-center justify-center gap-5 p-2 text-white rounded-xl ml-2'>
+            <div className='grid grid-cols-2'>
+
+                <div
+                    onClick={() => handleDelete(user._id)}
+                    className='bg-green-700/90 hover:bg-green-700 hover:cursor-pointer flex  items-center justify-center gap-5 p-2 text-white rounded-xl ml-2'>
+                    <LucideMoreVertical className='scale-120' />
+                    <h1 className='text-2xl font-semibold'>More Info</h1>
+                </div>
+
+                <div
+                    onClick={() => handleDelete(user._id)}
+                    className='bg-red-700/80 hover:bg-red-700 hover:cursor-pointer flex  items-center justify-center gap-5 p-2 text-white rounded-xl ml-2'>
                     <Trash2 className='scale-120' />
                     <h1 className='text-2xl font-semibold'>Delete</h1>
                 </div>
