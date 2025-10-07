@@ -13,20 +13,49 @@ function Usermanagement() {
   const [usersCount, setUserscount] = useState(0);
   const [adminCount, setAdminCount] = useState(0);
   const { user } = useAuth()
-  const [showModal,setShowModal]=useState(false)
-  const [loading,setLoading]=useState(false)
-  const [userTodelete,setUsertodelete]=useState(null)
+  //for deleteuser modal
+  const [showModal, setShowModal] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [userTodelete, setUsertodelete] = useState(null)
+  //for moreuserinfo modal
+  const [userdetails,setUserdetails]=useState({})
+  const [showUserdetailmodal,setshowuserdetailmodal]=useState(false);
+  const [U_Iloading,setU_Iloading]=useState(false);
   console.log(user._id)
 
-  const onClose=()=>{
+  //function for closing userinfo modal
+  const onUIClose=()=>{
+    setUserdetails(null);
+    setshowuserdetailmodal(false)
+  }
+  //function for closing the modal
+  const onClose = () => {
     setUsertodelete(null)
     setShowModal(false);
-
   }
-  const handleClick=(id)=>{
+
+  //function for opening the modal
+  const handleClick = (id) => {
     setUsertodelete(id)
     setShowModal(true)
   }
+
+
+  //function for getting user info
+  const handleMoreinfo=async(userId)=>{
+  try {
+    setU_Iloading(true)
+    setshowuserdetailmodal(true)
+    const response=await api.get(`/user/${userId}`)
+    setUserdetails(response.data.user)
+  } catch (error) {
+    console.log(error)
+  }finally{
+    setU_Iloading(false)
+  }
+  }
+
+  //function for deleting the user
   const handleDelete = async () => {
     try {
       setLoading(true)
@@ -45,11 +74,13 @@ function Usermanagement() {
     } catch (error) {
       console.log(error);
       toast(error)
-    }finally{
+    } finally {
       setLoading(false)
       onClose()
     }
   }
+
+  //fetching users for database
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -68,8 +99,8 @@ function Usermanagement() {
 
   return (
     <div className='w-[95%] min-h-full bg-white flex flex-col items-center'>
-      <UserInfo/>
-      <DeleteUserModal onConfirmdelete={handleDelete} onClose={onClose} isOpen={showModal} loading={loading}/>
+      <UserInfo isOpen={showUserdetailmodal} onClose={onUIClose} loading={U_Iloading} user={userdetails}/>
+      <DeleteUserModal onConfirmdelete={handleDelete} onClose={onClose} isOpen={showModal} loading={loading} />
       <div className='w-[90%] min-h-[70%] shadow-2xl mt-10 px-10 rounded-2xl pb-10'>
         <div className='flex justify-between  pt-5 '>
           <div className='flex flex-col gap-4'>
@@ -118,8 +149,9 @@ function Usermanagement() {
       <div className='w-[95%]  mt-10 flex flex-col gap-10 px-10'>
         {
           users.map((user) => {
+            console.log(user)
             return (
-              <Userinfocard user={user} handleDelete={handleClick} />
+              <Userinfocard user={user} handleDelete={handleClick} handleMoreinfo={handleMoreinfo} />
             )
           })
         }

@@ -1,7 +1,7 @@
 import { GraduationCap, LucideMoreVertical, ShieldCheckIcon, Trash2 } from 'lucide-react'
 import React from 'react'
 
-function Userinfocard({ user, handleDelete }) {
+function Userinfocard({ user, handleDelete,handleMoreinfo}) {
 
 
     return (
@@ -30,10 +30,10 @@ function Userinfocard({ user, handleDelete }) {
             <div className='grid grid-cols-2'>
 
                 <div
-                    onClick={() => handleDelete(user._id)}
+                    onClick={() => handleMoreinfo(user._id)}
                     className='bg-green-700/90 hover:bg-green-700 hover:cursor-pointer flex  items-center justify-center gap-5 p-2 text-white rounded-xl ml-2'>
                     <LucideMoreVertical className='scale-120' />
-                    <h1 className='text-2xl font-semibold'>More Info</h1>
+                    <h1 className='text-2xl font-semibold'>more info</h1>
                 </div>
 
                 <div

@@ -59,7 +59,7 @@ const Event = new mongoose.Schema({
 )
 // Add this virtual field instead
 Event.virtual('availableSeats').get(function () {
-    return this.capacity - (this.registereduser ? this.registereduser.length : 0);
+    return (this.capacity - (this.registereduser ? this.registereduser.length : 0));
 });
 
 Event.pre('save', function (next) {

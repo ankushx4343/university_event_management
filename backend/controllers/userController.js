@@ -147,7 +147,8 @@ export const getAllUsers=async(req,res)=>{
 export const getUserById=async(req,res)=>{
     try {
         const userId=req.params.id;
-        const user=await User.findById(userId);
+        const user=await User.findById(userId)
+        .populate('registeredEvents','title eventdate eventtime location capacity registereduser status');
         if(!user){
             return res.status(404).json({
                 success:false,

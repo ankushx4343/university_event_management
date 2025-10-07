@@ -235,7 +235,7 @@ export const registeredUsers = async (req, res) => {
         const id = req.params.eventId
         const event = await Event.findById(id)
             .populate('registereduser', 'firstname lastname email department')
-            .select('title eventdate location capacity registereduser')
+            .select('title eventdate location capacity registereduser availableSeats')
     
 
         if (!event) {
@@ -253,7 +253,8 @@ export const registeredUsers = async (req, res) => {
                 location: event.location,
                 capacity: event.capacity,
                 registeredCount: event.registereduser.length,
-                registeredUsers: event.registereduser
+                registeredUsers: event.registereduser,
+                availableSeats:event.availableSeats
             }
         });
     } catch (error) {
