@@ -5,9 +5,22 @@ import AddEventModal from './modals/AddEventModal';
 import EventInfo from './Additional/EventInfo';
 import DeleteEventModal from './modals/DeleteEventModal';
 import api from '../../../services/api';
+import EventInfoModal from './modals/EventInfoModal';
 
 function Eventmanagement() {
   const [showModal, setShowmodal] = useState(false);
+  //for EventInfoModal
+  const[showEventInfoModal,setShowEventInfoModal]=useState(false);
+  const[event,setEvent]=useState(null);
+  const onClose=()=>{
+    console.log("c;ose")
+    setShowEventInfoModal(false);
+  }
+  const handleClick=(event)=>{
+    console.log(event)
+    setEvent(event)
+    setShowEventInfoModal(true)
+  }
   const [events, setEvents] = useState([{
     id: 1,
     title: "Tech Conference 2024",
@@ -53,6 +66,7 @@ console.log("Number of events today:", todayEventCount);
   return (
     <>
       <div className='w-[95%] min-h-[95%] bg-white rounded-2xl flex flex-col items-center '>
+        <EventInfoModal onClose={onClose} isOpen={showEventInfoModal} event={event}/>
         {
           showModal &&
           <AddEventModal setShowmodal={setShowmodal} fetchEvents={fetchEvents}/>
@@ -120,7 +134,7 @@ console.log("Number of events today:", todayEventCount);
 
           </div>
         </div>
-        <EventInfo fetchEvents={fetchEvents} events={events} />
+        <EventInfo fetchEvents={fetchEvents} events={events} handleClick={handleClick}/>
       </div>
 
     </>

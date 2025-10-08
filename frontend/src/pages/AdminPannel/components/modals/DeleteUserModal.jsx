@@ -37,7 +37,7 @@ function DeleteUserModal({ isOpen, onClose, onConfirmdelete, loading = false }) 
                 </div>
                 <div
                 onClick={onClose}
-                className='hover:cursor-pointer absolute -top-8 -right-4 p-1 bg-gray-500/50 backdrop-blur-2xl rounded-full'>
+                className='hover:cursor-pointer absolute -top-7 -right-5 p-1  rounded-full'>
                     <X />
                 </div>
             </div>

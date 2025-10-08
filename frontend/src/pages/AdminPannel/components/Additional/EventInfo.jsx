@@ -4,11 +4,9 @@ import api from '../../../../services/api';
 import Infocard from './Infocard';
 import DeleteEventModal from '../modals/DeleteEventModal';
 
-function EventInfo({setShowdeletemodal,setEventtodelete,fetchEvents,events}) {
+function EventInfo({setShowdeletemodal,setEventtodelete,fetchEvents,events,handleClick}) {
     const { user } = useAuth();
     const [activeTab, setactiveTab] = useState("all");
-
-
     useEffect(() => {
         fetchEvents();
     }, [])
@@ -55,7 +53,9 @@ function EventInfo({setShowdeletemodal,setEventtodelete,fetchEvents,events}) {
                     event={event} 
                     setShowdeletemodal={setShowdeletemodal} 
                     setEventtodelete={setEventtodelete}
-                    fetchEvents={fetchEvents}/>
+                    fetchEvents={fetchEvents}
+                    handleCardClick={handleClick}
+                    />
             ))}
         </div>
     )

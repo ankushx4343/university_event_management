@@ -4,24 +4,27 @@ import api from '../../../../services/api'
 import DeleteEventModal from '../modals/DeleteEventModal'
 import toast from 'react-hot-toast';
 import useAuth from '../../../../context/useAuth';
+import EventInfoModal from '../modals/EventInfoModal';
 
-function Infocard({event,fetchEvents}) {
+function Infocard({event,fetchEvents,handleCardClick}) {
     const [showdeletemodal,setShowdeletemodal]=useState(false);
     const [loading,setLoading]=useState(false)
     const {user}=useAuth();
     const isCreatedByYou=user._id==event.createdBy
     const isComing=new Date(event.eventdate)>=new Date();
     console.log(event)
-    const handleClick=()=>{
+    const handleClick=(e)=>{
+        e.stopPropagation(); 
         setShowdeletemodal(true)
     }
     const onClose=()=>{
         setShowdeletemodal(false);
     }
     const onConfirmDelete=async()=>{
+         
         try {
             setLoading(true);
-            const response=await api.delete(`/event/delete/${event.id}`)
+            await api.delete(`/event/delete/${event.id}`)
             setLoading(false)
             fetchEvents()
             toast.success("event deleted")
@@ -40,7 +43,9 @@ function Infocard({event,fetchEvents}) {
         )
     }
     return (
-        <div className='w-[90%] bg-white mt-5 p-5 rounded-2xl flex flex-col gap-2    shadow-2xl relative'>
+        <div 
+        onClick={()=>{handleCardClick(event)}}
+        className='w-[90%] bg-white mt-5 p-5 rounded-2xl flex flex-col gap-2 shadow-2xl relative'>
             <div className='flex gap-4 items-center'>
                 <h1 className='text-2xl font-semibold'>{event.title}</h1>
                 {isComing &&
@@ -80,6 +85,7 @@ function Infocard({event,fetchEvents}) {
                     <Trash2/>
                 </div>
             </div>
+            {/* <EventInfoModal/> */}
             {
                 showdeletemodal &&
             <DeleteEventModal onClose={onClose} isOpen={showdeletemodal} loading={loading} evetTitle={event.title} onConfirmDelete={onConfirmDelete}/>
