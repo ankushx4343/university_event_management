@@ -46,7 +46,9 @@ export const createEvent = async (req, res) => {
 //getting all events
 export const getAllEvent = async (req, res) => {
     try {
-        const events = await Event.find();
+        const events = await Event.find()
+        .populate('createdBy','firstname lastname email _id')
+        .populate('registereduser','firstname lastname email studentId department')
         return res.status(200).json({
             success: true,
             msg: "event fetched successfully",
