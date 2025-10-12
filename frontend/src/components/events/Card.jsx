@@ -8,14 +8,13 @@ function Card({event,onClick}) {
   const{user}=useContext(AuthContex)
   
   useEffect(() => {
-    console.log('Event received in Card:', event);
-    console.log('Event type:', typeof event);
-    
     // Check if event is an object (not just an ID)
     if (event && typeof event === 'object' && event._id) {
       // Check if user is registered for this event
       if (event.registereduser && Array.isArray(event.registereduser) && user?._id) {
-        const isUserRegistered = event.registereduser.includes(user._id);
+        const isUserRegistered = event.registereduser.some(
+          RU=>RU._id===user._id
+        );
         setIsregistered(isUserRegistered);
       }
     } else {
@@ -47,10 +46,10 @@ function Card({event,onClick}) {
         }}
           whileTap={{ scale: 0.95 }}
           onClick={()=>onClick(event)}
-        className='h-[450px] w-[400px] bg-amber-50 rounded-2xl px-4 py-2 flex flex-col justify-center items-center gap-6 shadow-2xl'>
+        className='h-[450px] w-[400px] bg-amber-50 rounded-2xl px-4 py-2 flex flex-col justify-center items-center gap-6 shadow-lg'>
             <div className='w-full'>
                 <div className='text-3xl font-bold whitespace-nowrap overflow-hidden text-ellipsis w-full'>
-                    {event.title}
+                    {event.title.toUpperCase()}
                 </div> 
                 <div className='bg-blue-500 h-2 w-[100px] rounded-2xl mt-3'></div>   
             </div>  

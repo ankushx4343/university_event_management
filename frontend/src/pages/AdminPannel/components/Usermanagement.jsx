@@ -16,7 +16,7 @@ function Usermanagement() {
   //for deleteuser modal
   const [showModal, setShowModal] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [userTodelete, setUsertodelete] = useState(null)
+  const [userTodelete, setUsertodelete] = useState({})
   //for moreuserinfo modal
   const [userdetails,setUserdetails]=useState({})
   const [showUserdetailmodal,setshowuserdetailmodal]=useState(false);
@@ -30,13 +30,13 @@ function Usermanagement() {
   }
   //function for closing the modal
   const onClose = () => {
-    setUsertodelete(null)
+    setUsertodelete({})
     setShowModal(false);
   }
 
   //function for opening the modal
-  const handleClick = (id) => {
-    setUsertodelete(id)
+  const handleClick = (user) => {
+    setUsertodelete(user)
     setShowModal(true)
   }
 
@@ -59,15 +59,15 @@ function Usermanagement() {
   const handleDelete = async () => {
     try {
       setLoading(true)
-      await api.delete(`/user/${userTodelete}`)
+      await api.delete(`/user/${userTodelete._id}`)
       toast.success("user deleted ")
       //update users
-      setUsers((prev) => prev.filter(user => user._id !== userTodelete));
+      setUsers((prev) => prev.filter(user => user._id !== userTodelete._id));
       //update count 
       setUserscount((prev) => prev - 1)
 
       // Decrease admin count if deleted user was admin
-      const deletedUser = users.find(user => user._id === userTodelete);
+      const deletedUser = users.find(user => user._id === userTodelete._id);
       if (deletedUser?.role === "admin") {
         setAdminCount((prev) => prev - 1);
       }
@@ -100,7 +100,7 @@ function Usermanagement() {
   return (
     <div className='w-[95%] min-h-full bg-white flex flex-col items-center'>
       <UserInfo isOpen={showUserdetailmodal} onClose={onUIClose} loading={U_Iloading} user={userdetails}/>
-      <DeleteUserModal onConfirmdelete={handleDelete} onClose={onClose} isOpen={showModal} loading={loading} />
+      <DeleteUserModal  user={userTodelete} onConfirmdelete={handleDelete} onClose={onClose} isOpen={showModal} loading={loading} />
       <div className='w-[90%] min-h-[70%] shadow-2xl mt-10 px-10 rounded-2xl pb-10'>
         <div className='flex justify-between  pt-5 '>
           <div className='flex flex-col gap-4'>

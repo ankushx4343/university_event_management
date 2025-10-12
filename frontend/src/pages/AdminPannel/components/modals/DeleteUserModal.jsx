@@ -1,9 +1,9 @@
-import { X } from 'lucide-react'
+import { Trash2, TriangleAlert, X } from 'lucide-react'
 import React, { useEffect, useRef } from 'react'
 
-function DeleteUserModal({ isOpen, onClose, onConfirmdelete, loading = false }) {
-
-    const modalref=useRef()
+function DeleteUserModal({user, isOpen, onClose, onConfirmdelete, loading = false }) {
+    console.log(user)
+    const modalref = useRef()
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (modalref.current && !modalref.current.contains(e.target)) {
@@ -21,24 +21,29 @@ function DeleteUserModal({ isOpen, onClose, onConfirmdelete, loading = false }) 
     }
     return (
         <div className='inset-0 fixed z-10 bg-black/50 backdrop-blur-md flex justify-center items-center '>
-            <div ref={modalref} className='bg-white rounded-xl px-5 py-8 relative'>
-                <h1 className='text-2xl font-semibold'>Do you want to Delete <span className='text-blue-600 p-2 rounded-xl'>Ankush</span></h1>
-                <div className='mt-5 flex justify-center gap-4 w-full'>
-                    <button
+            <div ref={modalref} className='bg-white rounded-xl  py-8 relative w-[30%]'>
+                <diiv className='flex  justify-between items-center px-8'>
+                    <div className='flex items-center gap-10'>
+                        <TriangleAlert className='text-red-600 scale-140' />
+                        <h1 className='font-semibold text-2xl'>Delete User</h1>
+                    </div>
+                    <X 
                     onClick={onClose}
-                    className='hover:cursor-pointer bg-gray-500 text-white font-semibold text-2xl px-4 py-2 rounded-xl'>
-                        cancel
-                    </button>
-                    <button
-                    onClick={onConfirmdelete}
-                    className='hover:cursor-pointer bg-red-500 text-white font-semibold text-2xl px-4 py-2 rounded-xl'>
-                        {loading?"deleting...":"delete"}
-                    </button>
+                    className=' text-gray-500 scale-120 hover:cursor-pointer' />
+                </diiv>
+                <div className='w-full bg-gray-300 h-[2px] my-5'></div>
+                <div className='px-8'>
+                    <h1 className='text-gray-500 text-xl p-3'>Are you sure do you want you delete this user?</h1>
+                    <div className='bg-red-100 border-l-5 rounded-2xl px-4 border-red-700 py-8 font-semibold text-lg'>{user.firstname}{user.lastname}</div>
                 </div>
-                <div
-                onClick={onClose}
-                className='hover:cursor-pointer absolute -top-7 -right-5 p-1  rounded-full'>
-                    <X />
+                <div className='w-full bg-gray-300 h-[2px] my-5'></div>
+                <div className='flex justify-end px-8 gap-4'>
+                    <button 
+                    onClick={onClose}
+                    className='text-xl border-gray-600 border-2 rounded-2xl px-4 py-3 hover:cursor-pointer'>cancel</button>
+                    <button 
+                    onClick={onConfirmdelete}
+                    className='flex gap-3 text-xl px-4 py-3 bg-red-600 text-white items-center rounded-2xl font-semibold hover:cursor-pointer'><Trash2/>Delete</button>
                 </div>
             </div>
         </div>

@@ -74,10 +74,9 @@ useEffect(() => {
   }
   return (
     <div className='bg-gray-300  w-screen'>
-      <div className='mt-5 font-sans'>
-        <div className='flex flex-col justify-center items-center font-bold text-3xl'>
-          <h1>Your registered events</h1>
-          <div className='w-full h-[2px] bg-black mt-2'></div>
+      <div className='pt-5 font-sans'>
+        <div className='bg-blue-700 text-white py-5 ml-7 px-6 rounded-2xl items-center font-bold text-3xl my-8 w-[30%]'>
+          <h1>Your registered events ({registeredEvents.length})</h1>
         </div>
         <div className='w-screen grid grid-cols-4  gap-4 mt-10 px-10'>
           {
@@ -90,11 +89,10 @@ useEffect(() => {
             )
           }
         </div>
-        <div className='flex flex-col justify-center items-center font-bold text-3xl'>
-          <h1>All events</h1>
-          <div className='w-full h-[2px] bg-black mt-2'></div>
+        <div className='bg-blue-700 text-white py-5 ml-7 px-6 rounded-2xl items-center font-bold text-3xl my-8 w-[30%]'>
+          <h1>All events ({events.length})</h1>
         </div>
-      <div className='w-screen h-screen grid grid-cols-4  gap-4 mt-10 px-10'>
+      <div className='w-screen min-h-screen grid grid-cols-4  gap-10 mt-10 px-10'>
         {
           events.length === 0 ? (
             <p>No event found</p>

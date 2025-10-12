@@ -10,7 +10,7 @@ function Userinfocard({ user, handleDelete,handleMoreinfo}) {
                 <div className={`text-3xl font-bold px-5 py-3 rounded-xl border-5 m-2 bg-amber-50 w-fit ${user.role === "student" ? "border-green-500" : "border-purple-400"}`}>{user.firstname.charAt(0).toUpperCase()}</div>
                 <div className='text-2xl font-bold ml-2'>{user.firstname.toUpperCase()}</div>
                 <div className='text-xl text-gray-700 font-semibold ml-2'>{user.email}</div>
-                <span className='ml-2 text-xl bg-gray-700 text-white w-fit px-4 py-2 rounded-xl'>{user.department}</span>
+                <span className='ml-2 text-xl bg-gray-700 text-white w-fit px-4 py-2 rounded-xl'>{user.department.toUpperCase()}</span>
                 {user.role === "admin"
                     ?
                     <div className='absolute top-5 right-5 bg-purple-600 text-white flex justify-center items-center gap-3 px-1 py-1 rounded-xl font-semibold'>
@@ -27,18 +27,18 @@ function Userinfocard({ user, handleDelete,handleMoreinfo}) {
 
             {/* sepration line */}
             <div className='h-[1px] bg-gray-500 my-5'></div>
-            <div className='grid grid-cols-2'>
+            <div className='flex '>
 
                 <div
                     onClick={() => handleMoreinfo(user._id)}
-                    className='bg-green-700/90 hover:bg-green-700 hover:cursor-pointer flex  items-center justify-center gap-5 p-2 text-white rounded-xl ml-2'>
+                    className='bg-green-700/90 hover:bg-green-700 hover:cursor-pointer flex  items-center justify-center gap-1 p-2 text-white rounded-xl ml-2'>
                     <LucideMoreVertical className='scale-120' />
                     <h1 className='text-2xl font-semibold'>more info</h1>
                 </div>
 
                 <div
-                    onClick={() => handleDelete(user._id)}
-                    className='bg-red-700/80 hover:bg-red-700 hover:cursor-pointer flex  items-center justify-center gap-5 p-2 text-white rounded-xl ml-2'>
+                    onClick={() => handleDelete(user)}
+                    className='bg-red-700/80 hover:bg-red-700 hover:cursor-pointer flex  items-center justify-center gap-3 p-2 text-white rounded-xl ml-2'>
                     <Trash2 className='scale-120' />
                     <h1 className='text-2xl font-semibold'>Delete</h1>
                 </div>

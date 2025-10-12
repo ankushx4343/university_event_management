@@ -1,5 +1,5 @@
 import { Trash2, TriangleAlert, X } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 function DeleteEventModal({isOpen,onClose,evetTitle,onConfirmDelete,loading=false}) {
  const modalRef=useRef();
@@ -34,8 +34,8 @@ function DeleteEventModal({isOpen,onClose,evetTitle,onConfirmDelete,loading=fals
           <div className='mt-4'>
             <h3 className='text-xl text-gray-500'>Are you sure do you want to delete this event?</h3>
           </div>
-          <div className='mt-4 w-full overflow-clip py-8 bg-red-100 border-red-500 border-l-5 rounded-2xl text-md font-semibold'>
-            {evetTitle}
+          <div className='mt-4 w-full overflow-clip py-8 bg-red-100 border-red-500 border-l-5 rounded-2xl text-lg font-semibold pl-3'>
+              {evetTitle}
           </div>
         </div>
         <div className='w-full bg-gray-300 h-[2px] my-5'></div>

@@ -9,7 +9,9 @@ function EventDesModal({ event, isOpen, onClose, onUnregister, onRegister }) {
     const { user } = useContext(AuthContex)
     console.log(event.registereduser)
     useEffect(() => {
-        if (event.registereduser.includes(user._id)) {
+        if (event.registereduser.some(
+            RU=>RU._id===user._id
+        )) {
             setIsregistered(true)
         }
     }, [])
