@@ -12,13 +12,14 @@ import AdminDashboard from './pages/AdminPannel/components/AdminDashboard'
 import Eventmanagement from './pages/AdminPannel/components/Eventmanagement'
 import Usermanagement from './pages/AdminPannel/components/Usermanagement'
 import { Toaster } from 'react-hot-toast'
+import Navbar from './components/layout/Navbar'
 
 function App() {
   return (
     <>
     <Toaster/>
       <div className='min-h-screen pt-12'>
-        <Header/>
+        <Navbar/>
         <Routes>
           <Route path='/' element={<Home/>}></Route>
           <Route path='/login' element={<Login/>}></Route>
