@@ -58,7 +58,7 @@ function AdminDashboard() {
             <div>
               <h1 className='text-4xl font-bold  ml-2'>{Eventcount}</h1>
             </div>
-            <div className='text-gray-500 text-xl'>
+            <div className='text-gray-500 text-lg'>
               Active Events
             </div>
           </Motion.div>
@@ -79,7 +79,7 @@ function AdminDashboard() {
             <div>
               <h1 className='text-4xl font-bold  ml-2'>{totalUser}</h1>
             </div>
-            <div className='text-gray-500 text-xl'>
+            <div className='text-gray-500 text-lg'>
               Toatal users
             </div>
           </Motion.div>
@@ -100,7 +100,7 @@ function AdminDashboard() {
             <div>
               <h1 className='text-4xl font-bold  ml-2'>{todayEventscount}</h1>
             </div>
-            <div className='text-gray-500 text-xl'>
+            <div className='text-gray-500 text-lg'>
               Today Events
             </div>
           </Motion.div>
@@ -121,7 +121,7 @@ function AdminDashboard() {
             <div>
               <h1 className='text-4xl font-bold  ml-2'>4348</h1>
             </div>
-            <div className='text-gray-500 text-xl'>
+            <div className='text-gray-500 text-lg'>
               Toatal Registration
             </div>
           </Motion.div>

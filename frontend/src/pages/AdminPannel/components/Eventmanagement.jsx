@@ -9,12 +9,16 @@ import EventInfoModal from './modals/EventInfoModal';
 
 function Eventmanagement() {
   const [showModal, setShowmodal] = useState(false);
+
   //for EventInfoModal
   const[showEventInfoModal,setShowEventInfoModal]=useState(false);
   const[event,setEvent]=useState(null);
   const onClose=()=>{
-    console.log("c;ose")
+    console.log("close")
     setShowEventInfoModal(false);
+  }
+  const onClose2=()=>{
+    setShowmodal(false);
   }
   const handleClick=(event)=>{
     console.log(event)
@@ -69,7 +73,7 @@ console.log("Number of events today:", todayEventCount);
         <EventInfoModal onClose={onClose} isOpen={showEventInfoModal} event={event}/>
         {
           showModal &&
-          <AddEventModal setShowmodal={setShowmodal} fetchEvents={fetchEvents}/>
+          <AddEventModal onClose={onClose2} isOpen={showModal} fetchEvents={fetchEvents}/>
         }
         <div className='w-[90%] min-h-[70%] shadow-2xl mt-10 px-10 rounded-2xl pb-10'>
           <div className='flex justify-between  pt-5 '>

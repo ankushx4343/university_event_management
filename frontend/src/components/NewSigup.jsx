@@ -19,7 +19,7 @@ import toast from "react-hot-toast"
 function NewSignup() {
 
     const navigate = useNavigate();
-
+    const [loading,setLoading]=useState(false);
     const [Fname, setFname] = useState("");
     const [Lname, setLname] = useState("");
     const [email, setEmail] = useState("");
@@ -29,6 +29,7 @@ function NewSignup() {
     const { login } = useContext(AuthContex);
 
     const handleRegister = async (e) => {
+        setLoading(true)
         e.preventDefault();
         console.log(Fname, Lname, email, password, department, studentId)
         let res
@@ -49,14 +50,16 @@ function NewSignup() {
         } catch (error) {
             console.log(error.response.data)
             toast.error(error.response.data.message)
+        }finally{
+            setLoading(false);
         }
     }
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Log in</CardTitle>
-                <CardDescription>Enter your email below to login to your account</CardDescription>
+                <CardTitle>Sign up</CardTitle>
+                <CardDescription>Enter your details below to sign up to your account</CardDescription>
                 <CardAction>
                     <Link to={"/login"}>
                         <Button variant="link">Log in</Button>
@@ -135,7 +138,9 @@ function NewSignup() {
                 </form>
             </CardContent>
             <CardFooter className="flex-col gap-2">
-                <Button type="submit" className="w-full" onClick={handleRegister}>Sign up</Button>
+                <Button type="submit" className="w-full" onClick={handleRegister}>{
+                    loading?"Loading...":"Sign Up"
+                    }</Button>
             </CardFooter>
         </Card>
     )

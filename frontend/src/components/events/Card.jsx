@@ -46,9 +46,9 @@ function Card({event,onClick}) {
         }}
           whileTap={{ scale: 0.95 }}
           onClick={()=>onClick(event)}
-        className='h-[450px] w-[400px] bg-amber-50 rounded-2xl px-4 py-2 flex flex-col justify-center items-center gap-6 shadow-lg'>
+        className='h-[410px] w-[350px] bg-amber-50 rounded-2xl px-4 py-2 flex flex-col justify-center items-center gap-6 shadow-lg'>
             <div className='w-full'>
-                <div className='text-3xl font-bold whitespace-nowrap overflow-hidden text-ellipsis w-full'>
+                <div className='text-2xl font-bold whitespace-nowrap overflow-hidden text-ellipsis w-full'>
                     {event.title.toUpperCase()}
                 </div> 
                 <div className='bg-blue-500 h-2 w-[100px] rounded-2xl mt-3'></div>   

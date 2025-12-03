@@ -17,10 +17,10 @@ function Navbar() {
     }
     return (
         <div className='w-full flex justify-center'>
-            <div className='z-10 rounded-full fixed top-5 mx-auto w-[45%] bg-black/70 backdrop-blur-md h-16 flex justify-between px-10  items-center'>
+            <div className='z-10 rounded-full fixed top-5 mx-auto w-[45%] bg-black/70 backdrop-blur-lg h-14 flex justify-between px-10  items-center'>
                 <div className='flex items-center gap-8'>
                     <Link to={"/home"}>
-                        <h1 className='text-3xl font-bold text-white'>UniE</h1>
+                        <h1 className='text-2xl font-bold text-white'>UniE</h1>
                     </Link>
                     <div>
                         <ul className='flex gap-4 items-center font-semibold text-gray-100 transition-all ease-in-out duration-200'>
@@ -58,7 +58,7 @@ function Navbar() {
                         ):(
                     <button 
                     onClick={handleLogout}
-                    className='flex gap-2 font-semibold text-amber-50 px-3 py-1 hover:cursor-pointer hover:bg-red-400/10 px-3 py-1 rounded-md'>
+                    className='flex gap-2 font-semibold text-amber-50  py-1 hover:cursor-pointer  hover:border-b-2 transition-colors duration-300 ease-in'>
                         <LogOut/>
                         <h3>
                         logout

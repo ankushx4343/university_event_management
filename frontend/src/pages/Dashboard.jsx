@@ -78,7 +78,7 @@ useEffect(() => {
         <div className='bg-blue-700 text-white py-5 ml-7 px-6 rounded-2xl items-center font-bold text-3xl my-8 w-[30%]'>
           <h1>Your registered events ({registeredEvents.length})</h1>
         </div>
-        <div className='w-screen grid grid-cols-4  gap-4 mt-10 px-10'>
+        <div className='w-screen grid grid-cols-3  gap-4 mt-10 px-10'>
           {
             events.length === 0 ? (
               <p>No event found</p>
@@ -92,7 +92,7 @@ useEffect(() => {
         <div className='bg-blue-700 text-white py-5 ml-7 px-6 rounded-2xl items-center font-bold text-3xl my-8 w-[30%]'>
           <h1>All events ({events.length})</h1>
         </div>
-      <div className='w-screen min-h-screen grid grid-cols-4  gap-10 mt-10 px-10'>
+      <div className='w-screen min-h-screen grid grid-cols-3  gap-10 mt-10 px-10'>
         {
           events.length === 0 ? (
             <p>No event found</p>
