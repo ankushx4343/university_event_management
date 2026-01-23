@@ -13,15 +13,19 @@ import Eventmanagement from './pages/AdminPannel/components/Eventmanagement'
 import Usermanagement from './pages/AdminPannel/components/Usermanagement'
 import { Toaster } from 'react-hot-toast'
 import Navbar from './components/layout/Navbar'
+import Contacts from './pages/AdminPannel/Contacts'
+import About from './pages/About'
 
 function App() {
   return (
     <>
     <Toaster/>
-      <div className='min-h-screen'>
+      <div className='min-h-screen pt-20'>
         <Navbar/>
         <Routes>
           <Route path='/' element={<Home/>}></Route>
+          <Route path='/contacts' element={<Contacts/>}></Route>
+          <Route path='/about' element={<About/>}></Route>
           <Route path='/login' element={<Login/>}></Route>
           <Route path='/register' element={<Register/>}></Route>
           <Route path='/admin' element={

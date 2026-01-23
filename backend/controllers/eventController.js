@@ -2,6 +2,7 @@ import mongoose, { mongo } from "mongoose";
 import Event from "../models/eventModel.js"
 import { createNotification } from "./notificationController.js";
 import userModel from "../models/userModel.js";
+import {sendEventRegistrationEmail} from '../services/emailservices.js'
 
 //creating event
 export const createEvent = async (req, res) => {
@@ -293,7 +294,7 @@ export const registerForEvent = async (req, res) => {
                 msg: "you have already registered for the event"
             })
         }
-
+  
         //capacity full toh nhi ho gyi hai 
         if (event.registereduser.length >= event.capacity) {
             return res.status(400).json({
@@ -332,6 +333,22 @@ export const registerForEvent = async (req, res) => {
             })
         }
 
+         // 🆕 SEND CONFIRMATION EMAIL
+        const emailResult = await sendEventRegistrationEmail(
+            user.email,
+            user.firstname,
+            {
+                title: event.title,
+                date: event.eventdate,
+                time: event.eventtime,
+                venue: event.location
+            }
+        );
+
+        if (!emailResult.success) {
+            console.error('Failed to send confirmation email:', emailResult.error);
+            // Don't fail the registration if email fails
+        }
         return res.status(200).json({
             success: true,
             msg: "successfully registered for the event",

@@ -46,22 +46,22 @@ function Card({event,onClick}) {
         }}
           whileTap={{ scale: 0.95 }}
           onClick={()=>onClick(event)}
-        className='h-[410px] w-[350px] bg-amber-50 rounded-2xl px-4 py-2 flex flex-col justify-center items-center gap-6 shadow-lg'>
+        className='h-[390px] w-[320px] bg-amber-50 rounded-2xl px-4 py-2 flex flex-col justify-center items-center gap-6 shadow-lg'>
             <div className='w-full'>
-                <div className='text-2xl font-bold whitespace-nowrap overflow-hidden text-ellipsis w-full'>
+                <div className='text-xl font-bold whitespace-nowrap overflow-hidden text-ellipsis w-full'>
                     {event.title.toUpperCase()}
                 </div> 
-                <div className='bg-blue-500 h-2 w-[100px] rounded-2xl mt-3'></div>   
+                <div className='bg-blue-500 h-1 w-[100px] rounded-2xl mt-3'></div>   
             </div>  
 
             {/* event info */}
-            <div className=' w-full flex flex-col items-start mt-3 gap-3'>
+            <div className=' w-full flex flex-col items-start mt-1 gap-3'>
               {/* event date */}
               <div className='flex justify-center  items-center gap-5 m-1'>
-                <div className='w-12 h-12 bg-blue-200 flex justify-center items-center rounded-lg'>
-                 <Calendar className='w-6 h-6 text-blue-700'/>
+                <div className='w-10 h-10 bg-blue-200 flex justify-center items-center rounded-lg'>
+                 <Calendar className='w-5 h-5 text-blue-700'/>
                 </div>
-                <div className='text-xl '>
+                <div className='text-lg'>
                     <h1 className=''>Event Date</h1>
                     <h2 className='font-bold'>{formattedDate}</h2>
                 </div>
@@ -69,10 +69,10 @@ function Card({event,onClick}) {
 
               {/* location */}
               <div className='flex justify-center  items-center gap-5 m-1'>
-                <div className='w-12 h-12 bg-green-200 flex justify-center items-center rounded-lg'>
-                 <MapPin className='w-6 h-6 text-green-700'/>
+                <div className='w-10 h-10 bg-green-200 flex justify-center items-center rounded-lg'>
+                 <MapPin className='w-5 h-5 text-green-800'/>
                 </div>
-                <div className='text-xl '>
+                <div className='text-lg '>
                     <h1 className=''>Location</h1>
                     <h2 className='font-bold'>{event.location}</h2>
                 </div>
@@ -80,10 +80,10 @@ function Card({event,onClick}) {
 
               {/* event deadline */}
               <div className='flex justify-center  items-center gap-5 m-1'>
-                <div className='w-12 h-12 bg-red-200 flex justify-center items-center rounded-lg'>
-                 <Clock4 className='w-6 h-6 text-red-700'/>
+                <div className='w-10 h-10 bg-red-200 flex justify-center items-center rounded-lg'>
+                 <Clock4 className='w-5 h-5 text-red-700'/>
                 </div>
-                <div className='text-xl '>
+                <div className='text-lg '>
                     <h1 className=''>Time </h1>
                     <h2 className='font-bold'>{event.eventtime}</h2>
                 </div>
@@ -91,7 +91,7 @@ function Card({event,onClick}) {
             </div>
             {
               isRegistered?(
-              <div className='w-full bg-gray-300  rounded-xl p-3 px-6 flex justify-between items-center text-2xl font-semibold hover:bg-gray-700 hover:text-white'>
+              <div className='w-full bg-gray-300  rounded-xl p-2 px-4 flex justify-between items-center text-xl font-semibold hover:bg-gray-700 hover:text-white'>
             <h1>
                 Registered
             </h1>

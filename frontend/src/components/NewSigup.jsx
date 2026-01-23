@@ -59,7 +59,7 @@ function NewSignup() {
         <Card>
             <CardHeader>
                 <CardTitle>Sign up</CardTitle>
-                <CardDescription>Enter your details below to sign up to your account</CardDescription>
+                <CardDescription>Enter your details below to signup </CardDescription>
                 <CardAction>
                     <Link to={"/login"}>
                         <Button variant="link">Log in</Button>
@@ -68,13 +68,13 @@ function NewSignup() {
             </CardHeader>
             <CardContent>
                 <form >
-                    <div className="flex flex-col gap-6">
-                        <div className="grid gap-2">
+                    <div className="flex flex-col gap-3">
+                        <div className="grid gap-1">
                             <Label htmlFor="fname">First name</Label>
                             <Input
                                 id="fname"
                                 type="text"
-                                placeholder="Ankush Rana"
+                                placeholder="Ankush"
                                 value={Fname}
                                 onChange={(e) => setFname(e.target.value)}
                                 required
