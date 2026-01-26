@@ -1,10 +1,19 @@
 import  {Resend}  from 'resend';
 
-const resend = new Resend("re_VeyvgyYs_AAdimMneMPaasnuu3F8DqwEe");
+let resendClient=null
+const getResendClient=()=>{
+  if(!resendClient){
+    if(!process.env.RESEND_API_KEY){
+      throw new Error("RESEND_API_KEY is missing");
+    }
+    resendClient=new Resend(process.env.RESEND_API_KEY);
+  }
+  return resendClient;
+}
 
 export const sendEventRegistrationEmail = async (userEmail, userName, eventDetails) => {
   try {
-    console.log(process.env.RESEND_API_KEY)
+    const resend=getResendClient();
     const { data, error } = await resend.emails.send({
       from: 'University Events <onboarding@resend.dev>', // Change this later with your domain
       to: [userEmail],
@@ -37,6 +46,7 @@ export const sendEventRegistrationEmail = async (userEmail, userName, eventDetai
 
 const sendEventReminderEmail = async (userEmail, userName, eventDetails) => {
   try {
+    const resend=getResendClient();
     const { data, error } = await resend.emails.send({
       from: 'University Events <onboarding@resend.dev>',
       to: [userEmail],
