@@ -2,7 +2,7 @@ import mongoose, { mongo } from "mongoose";
 import Event from "../models/eventModel.js"
 import { createNotification } from "./notificationController.js";
 import userModel from "../models/userModel.js";
-import {sendEventRegistrationEmail} from '../services/emailservices.js'
+import {sendEventRegistrationEmail, sendEventReminderEmail} from '../services/emailservices.js'
 
 //creating event
 export const createEvent = async (req, res) => {
@@ -433,3 +433,72 @@ export const unregisterForEvent = async (req, res) => {
         })
     }
 }
+
+//send email reminder
+export const sendEventReminders = async (req, res) => {
+    try {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
+
+        const dayAfterTomorrow = new Date(tomorrow);
+        dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 1);
+
+        // Find events happening tomorrow
+        const upcomingEvents = await Event.find({
+            eventdate: {
+                $gte: tomorrow,
+                $lt: dayAfterTomorrow
+            }
+        }).populate('registereduser', 'email firstname');
+
+        if (upcomingEvents.length === 0) {
+            return res.status(200).json({
+                success: true,
+                msg: "No events tomorrow, no reminders to send"
+            });
+        }
+
+        let emailsSent = 0;
+        let emailsFailed = 0;
+
+        // Send reminder to each registered user
+        for (const event of upcomingEvents) {
+            for (const user of event.registereduser) {
+                const emailResult = await sendEventReminderEmail(
+                    user.email,
+                    user.firstname,
+                    {
+                        title: event.title,
+                        date: event.eventdate,
+                        time: event.eventtime,
+                        venue: event.location
+                    }
+                );
+
+                if (emailResult.success) {
+                    emailsSent++;
+                } else {
+                    emailsFailed++;
+                }
+            }
+        }
+
+        return res.status(200).json({
+            success: true,
+            msg: "Reminders sent successfully",
+            data: {
+                eventsFound: upcomingEvents.length,
+                emailsSent,
+                emailsFailed
+            }
+        });
+
+    } catch (error) {
+        console.error("Error sending reminders:", error);
+        res.status(500).json({
+            success: false,
+            msg: "Failed to send reminders"
+        });
+    }
+};

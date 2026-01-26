@@ -44,7 +44,7 @@ export const sendEventRegistrationEmail = async (userEmail, userName, eventDetai
   }
 };
 
-const sendEventReminderEmail = async (userEmail, userName, eventDetails) => {
+export const sendEventReminderEmail = async (userEmail, userName, eventDetails) => {
   try {
     const resend=getResendClient();
     const { data, error } = await resend.emails.send({

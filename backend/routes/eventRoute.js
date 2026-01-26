@@ -1,7 +1,8 @@
 import express from 'express'
 import protect from '../middlewares/auth.js';
 import { admin } from '../middlewares/admin.js';
-import { countTodaysEvents, countUpcomingEvents, createEvent, deleteEvent, getAllEvent, getEventById, registeredUsers, registerForEvent, unregisterForEvent, updateEvent } from '../controllers/eventController.js';
+import { countTodaysEvents, countUpcomingEvents, createEvent, deleteEvent, getAllEvent, getEventById, registeredUsers, registerForEvent, sendEventReminders, unregisterForEvent, updateEvent } from '../controllers/eventController.js';
+import { sendEventReminderEmail } from '../services/emailservices.js';
 
 const router=express.Router();
 
@@ -18,5 +19,6 @@ router.get("/count/activeevents",protect,admin,countUpcomingEvents)//only admin 
 router.get("/count/todayevent",protect,admin,countTodaysEvents)
 router.put("/update/:id",protect,admin,updateEvent);
 router.get("/registrations/:eventId",protect,admin,registeredUsers)
+router.post("/sendeventreminder",protect,admin,sendEventReminders)
 
 export default router;
