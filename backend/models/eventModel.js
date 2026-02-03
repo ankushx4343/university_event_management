@@ -40,7 +40,12 @@ const Event = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
-
+   category:{
+    type:String,
+    required:true,
+    enum:['workshop','seminar','cultural','sports','other'],
+    default:'other'
+   },
     status: {
         type: String,
         enum: ['upcoming', 'registration-closed', 'full', 'completed'],

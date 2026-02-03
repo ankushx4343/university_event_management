@@ -1,4 +1,4 @@
-import { Calendar, Clock, MapPin, Users, X } from 'lucide-react'
+import { Calendar, Clock, Layers, MapPin, Users, X } from 'lucide-react'
 import React, { useContext, useEffect, useState } from 'react'
 import api from '../../services/api';
 import toast, { Toaster } from 'react-hot-toast';
@@ -10,7 +10,7 @@ function EventDesModal({ event, isOpen, onClose, onUnregister, onRegister }) {
     console.log(event.registereduser)
     useEffect(() => {
         if (event.registereduser.some(
-            RU=>RU._id===user._id
+            RU => RU._id === user._id
         )) {
             setIsregistered(true)
         }
@@ -43,7 +43,7 @@ function EventDesModal({ event, isOpen, onClose, onUnregister, onRegister }) {
             toast.success("unregistered successfully")
             setIsregistered(false);
             console.log(res);
-        } catch (error) {   
+        } catch (error) {
             console.log(error.message)
             toast.error("cannot unregister for the event")
         }
@@ -100,6 +100,14 @@ function EventDesModal({ event, isOpen, onClose, onUnregister, onRegister }) {
                             </div>
                             <span className='font-bold'>Capacity:</span>
                             <span>{event.capacity}</span>
+                        </div>
+
+                        <div className='flex gap-3 text-xl'>
+                            <div className='text-blue-500'>
+                                <Layers className='w-7 h-7' />
+                            </div>
+                            <span className='font-bold'>Category:</span>
+                            <span>{event.category}</span>
                         </div>
                     </div>
 

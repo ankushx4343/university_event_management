@@ -30,8 +30,6 @@ function Navbar() {
     const handleLogout = () => {
         logout();
     }
-    console.log(location.pathname.split("/")[1])
-    console.log(navlinks[1].path.split("/")[1])
 
     return (
         <div className={`z-10 transition-transform duration-300 fixed top-0 left-0 right-0 w-full flex justify-center ${isVisible?'translate-y-0':'-translate-y-full'}`}>

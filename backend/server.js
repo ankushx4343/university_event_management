@@ -16,7 +16,14 @@ connectDB();
 
 //middleware
 app.use(express.json());
-app.use(cors())
+app.use(cors({
+    origin: [
+        'http://localhost:3000',           // Local development
+        'http://localhost:5173',           // Vite local
+        'https://your-app-name.vercel.app' // Production (we'll update this later)
+    ],
+    credentials: true
+}));
 
 app.use("/api/auth",authRoute);
 app.use("/api/event",eventRoute);

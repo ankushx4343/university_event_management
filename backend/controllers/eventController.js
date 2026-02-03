@@ -7,8 +7,8 @@ import {sendEventRegistrationEmail, sendEventReminderEmail} from '../services/em
 //creating event
 export const createEvent = async (req, res) => {
     try {
-        const { title, description, eventdate, eventtime, registrationdeadline, location, capacity } = req.body;
-        if (!title || !description || !eventdate || !eventtime || !registrationdeadline || !location || !capacity) {
+        const { title, description, eventdate, eventtime, registrationdeadline, location, capacity,category } = req.body;
+        if (!title || !description || !eventdate || !eventtime || !registrationdeadline || !location || !capacity ||!category) {
             return res.status(400).json({
                 success: false,
                 msg: "all fields are required"
@@ -22,6 +22,7 @@ export const createEvent = async (req, res) => {
             registrationdeadline,
             location,
             capacity,
+            category,
             createdBy: req.user._id
         })
 
@@ -123,7 +124,7 @@ export const updateEvent = async (req, res) => {
             })
         }
 
-        const { title, description, eventdate, eventtime, registrationdeadline, location, capacity } = req.body;
+        const { title, description, eventdate, eventtime, registrationdeadline, location, capacity,category } = req.body;
         event.title = title || event.title;
         event.description = description || event.description;
         event.eventdate = eventdate || event.eventdate;
@@ -131,7 +132,8 @@ export const updateEvent = async (req, res) => {
         event.registrationdeadline = registrationdeadline || event.registrationdeadline;
         event.location = location || event.location;
         event.capacity = capacity || event.capacity;
-
+        event.category=category || event.category;
+        
         event.save();
         return res.status(200).json({
             success: true,
