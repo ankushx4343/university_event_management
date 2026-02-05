@@ -21,21 +21,26 @@ function NewLogin() {
     const [password, setPassword] = useState();
     const navigate = useNavigate();
     const { login } = useContext(AuthContex);
+    const [loading,setLoading]=useState(false);
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true)
             const res = await api.post("/auth/login", { email, password });
 
             if (res.data.success) {
                 setToken(res.data.token);
+                setLoading(false)
                 login(res.data.user);
                 toast.success(res.data.message || "Login successful!");
                 navigate("/dashboard");
+
             } else {
                 toast.error(res.data.message || "Login failed!");
             }
         } catch (err) {
+            setLoading(false)
             toast.error(err.response?.data?.message || "Something went wrong!");
         }
     };
@@ -79,7 +84,7 @@ return (
             </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
-            <Button type="submit" className="w-full" onClick={handleLogin}>Login</Button>
+            <Button type="submit" className="w-full" onClick={handleLogin}>{loading?"loging...":"login"}</Button>
         </CardFooter>
     </Card>
 )

@@ -5,6 +5,8 @@ import api from '../services/api';
 import EventDesModal from '../components/events/EventDesModal';
 import { useContext } from 'react';
 import { AuthContex } from '../context/AuthContext';
+import { Badge } from "@/components/ui/badge"
+import { Spinner } from "@/components/ui/spinner"
 import {
   Select,
   SelectContent,
@@ -58,9 +60,9 @@ function Dashboard() {
       case 'sports':
         return event.category === "sports";
       case 'other':
-        return event.category==="other"  
+        return event.category === "other"
       case 'all':
-        return event  
+        return event
       default:
         return true;
     }
@@ -94,7 +96,11 @@ function Dashboard() {
     setRegisteredEvents((prev) => prev.filter(ev => ev.id !== event.id))
   }
   if (!user) {
-    return <p>Loading user data...</p>;
+    return (
+      <Badge>
+        <Spinner data-icon="inline-start" />
+        Syncing
+      </Badge>);
   }
   return (
     <div className='bg-gray-300  w-screen'>
