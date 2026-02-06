@@ -6,6 +6,7 @@ import authRoute from './routes/authRoute.js';
 import eventRoute from './routes/eventRoute.js';
 import userRoute from  './routes/userRoute.js';
 import notificationRoute from './routes/notificationRoute.js'
+import otproute from './routes/otproute.js'
 dotenv.config();
 
 const app=express();
@@ -28,7 +29,8 @@ app.use(cors({
 app.use("/api/auth",authRoute);
 app.use("/api/event",eventRoute);
 app.use("/api/user",userRoute);
-app.use("/api/notifications",notificationRoute)
+app.use("/api/notifications",notificationRoute);
+app.use("/api/otp",otproute);
 
 app.get("/api/test",(req,res)=>{
     res.json({

@@ -1,22 +1,28 @@
-import  {Resend}  from 'resend';
+import nodemailer from "nodemailer";
 
-let resendClient=null
-const getResendClient=()=>{
-  if(!resendClient){
-    if(!process.env.RESEND_API_KEY){
-      throw new Error("RESEND_API_KEY is missing");
-    }
-    resendClient=new Resend(process.env.RESEND_API_KEY);
+// Create a singleton transporter
+let transporter = null;
+const getTransporter = () => {
+  if (!transporter) {
+     transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "anku5556611@gmail.com",
+        pass: "crqxppaopvvljpfw"
+      }
+    });
   }
-  return resendClient;
-}
+  return transporter;
+};
 
+// 1️⃣ Send Event Registration Email
 export const sendEventRegistrationEmail = async (userEmail, userName, eventDetails) => {
   try {
-    const resend=getResendClient();
-    const { data, error } = await resend.emails.send({
-      from: 'University Events <onboarding@resend.dev>', // Change this later with your domain
-      to: [userEmail],
+    const transporter = getTransporter();
+
+    const info = await transporter.sendMail({
+      from: `"University Events" <${process.env.SMTP_USER}>`,
+      to: userEmail,
       subject: `Registration Confirmed: ${eventDetails.title}`,
       html: `
         <h2>Hello ${userName}!</h2>
@@ -32,24 +38,21 @@ export const sendEventRegistrationEmail = async (userEmail, userName, eventDetai
       `,
     });
 
-    if (error) {
-      console.error('Email sending error:', error);
-      return { success: false, error };
-    }
-
-    return { success: true, data };
+    return { success: true, info };
   } catch (error) {
-    console.error('Email service error:', error);
+    console.error("Registration email error:", error);
     return { success: false, error };
   }
 };
 
+// 2️⃣ Send Event Reminder Email
 export const sendEventReminderEmail = async (userEmail, userName, eventDetails) => {
   try {
-    const resend=getResendClient();
-    const { data, error } = await resend.emails.send({
-      from: 'University Events <onboarding@resend.dev>',
-      to: [userEmail],
+    const transporter = getTransporter();
+
+    const info = await transporter.sendMail({
+      from: `"University Events" <${process.env.SMTP_USER}>`,
+      to: userEmail,
       subject: `Reminder: ${eventDetails.title} is Tomorrow!`,
       html: `
         <h2>Hello ${userName}!</h2>
@@ -65,16 +68,31 @@ export const sendEventReminderEmail = async (userEmail, userName, eventDetails) 
       `,
     });
 
-    if (error) {
-      console.error('Reminder email error:', error);
-      return { success: false, error };
-    }
-
-    return { success: true, data };
+    return { success: true, info };
   } catch (error) {
-    console.error('Email service error:', error);
+    console.error("Reminder email error:", error);
     return { success: false, error };
   }
 };
 
+// 3️⃣ Send OTP Email
+export const sendOTP = async (email, otp) => {
+  try {
+    const transporter = getTransporter();
 
+    const info = await transporter.sendMail({
+      from: `"University Events" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: `Your OTP for uniE signup is: ${otp}`,
+      html: `
+        <h2>Hello ${email}!</h2>
+        <p>Your OTP for uniE is <strong>${otp}</strong></p>
+      `,
+    });
+
+    return { success: true, info };
+  } catch (error) {
+    console.error("OTP email error:", error);
+    return { success: false, error };
+  }
+};
