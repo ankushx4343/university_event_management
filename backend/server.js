@@ -21,7 +21,7 @@ app.use(cors({
     origin: [
         'http://localhost:3000',           // Local development
         'http://localhost:5173',           // Vite local
-        'https://your-app-name.vercel.app' // Production (we'll update this later)
+        'https://university-event-management.vercel.app' // Production (we'll update this later)
     ],
     credentials: true
 }));
