@@ -6,6 +6,10 @@ const getTransporter = () => {
   if (!transporter) {
      transporter = nodemailer.createTransport({
       service: "gmail",
+        port: 587,
+ 
+ 
+        secure: false, // IMPORTANT
       auth: {
         user: "anku5556611@gmail.com",
         pass: "crqxppaopvvljpfw"
