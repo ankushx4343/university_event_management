@@ -18,8 +18,11 @@ import toast from "react-hot-toast"
 
 function NewSignup() {
 
+    const [phase, setPhase] = useState("email");
+    const [otp, setOtp] = useState("");
+    const [verificationtoken, setverificationtoken] = useState(null);
     const navigate = useNavigate();
-    const [loading,setLoading]=useState(false);
+    const [loading, setLoading] = useState(false);
     const [Fname, setFname] = useState("");
     const [Lname, setLname] = useState("");
     const [email, setEmail] = useState("");
@@ -28,7 +31,41 @@ function NewSignup() {
     const [studentId, setStudentId] = useState("");
     const { login } = useContext(AuthContex);
 
+    const handleSendOtp = async () => {
+        try {
+            setLoading(true);
+            await api.post("/otp/send-otp", { email });
+            toast.success("OTP sent to email");
+            setPhase("otp");
+        } catch (err) {
+            console.log(err)
+            toast.error(err.response?.data?.message || "Failed to send OTP");
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleVerifyToken = async () => {
+        try {
+            setLoading(true);
+            const res = await api.put("/otp/verify-otp", {
+                email,
+                otp
+            })
+            setverificationtoken(res.data.verificationtoken)
+            toast.success("email verified")
+            setPhase("signup")
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Invalid OTP");
+        } finally {
+            setLoading(false);
+        }
+    }
     const handleRegister = async (e) => {
+        if (!verificationtoken) {
+            toast.error("Please verify email first")
+            return
+        }
         setLoading(true)
         e.preventDefault();
         console.log(Fname, Lname, email, password, department, studentId)
@@ -40,7 +77,8 @@ function NewSignup() {
                 "email": email,
                 "password": password,
                 "department": department,
-                "studentId": studentId
+                "studentId": studentId,
+                verificationtoken
             })
             setToken(res.data.token);
             console.log(localStorage.getItem('token'))
@@ -50,7 +88,7 @@ function NewSignup() {
         } catch (error) {
             console.log(error.response.data)
             toast.error(error.response.data.message)
-        }finally{
+        } finally {
             setLoading(false);
         }
     }
@@ -68,6 +106,7 @@ function NewSignup() {
             </CardHeader>
             <CardContent>
                 <form >
+
                     <div className="flex flex-col gap-3">
                         <div className="grid gap-1">
                             <Label htmlFor="fname">First name</Label>
@@ -91,17 +130,31 @@ function NewSignup() {
                                 required
                             />
                         </div>
-                        <div className="grid gap-2">
+                        <div className="grid gap-1">
                             <Label htmlFor="email">Email</Label>
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="an@gmail.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                required
+                                disabled={phase !== "email"}
                             />
                         </div>
+
+                        {phase === "otp" && (
+                            <div className="grid gap-2">
+                                <Label htmlFor="otp">OTP</Label>
+                                <Input
+                                    id="otp"
+                                    type="text"
+                                    value={otp}
+                                    onChange={(e) => setOtp(e.target.value)}
+                                />
+                                <Button onClick={handleVerifyToken} disabled={loading}>
+                                    Verify OTP
+                                </Button>
+                            </div>
+                        )}
                         <div className="grid gap-2">
                             <Label htmlFor="password">Password</Label>
                             <Input
@@ -135,13 +188,23 @@ function NewSignup() {
                             />
                         </div>
                     </div>
+
                 </form>
             </CardContent>
             <CardFooter className="flex-col gap-2">
-                <Button type="submit" className="w-full" onClick={handleRegister}>{
-                    loading?"Loading...":"Sign Up"
-                    }</Button>
+                {phase === "email" && (
+                    <Button onClick={handleSendOtp} disabled={loading}>
+                        Send OTP
+                    </Button>
+                )}
+
+                {phase === "signup" && (
+                    <Button onClick={handleRegister} disabled={loading}>
+                        {loading ? "Loading..." : "Sign Up"}
+                    </Button>
+                )}
             </CardFooter>
+
         </Card>
     )
 }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 //base_url
-const BASE_URL='https://university-event-management-0moa.onrender.com/api'
+const BASE_URL='http://localhost:5000/api'
 
 const api=axios.create({
     baseURL:BASE_URL,
