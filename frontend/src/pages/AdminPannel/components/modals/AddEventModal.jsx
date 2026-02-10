@@ -92,9 +92,9 @@ function    AddEventModal({ isOpen, onClose, fetchEvents }) {
                             <div className="flex flex-col gap-6 mt-2">
                                 <Input name="title" value={formdata.title} onChange={handleChange} placeholder="Title" />
                                 <Input name="description" value={formdata.description} onChange={handleChange} placeholder="Description" />
-                                <Input type="date" name="date" value={formdata.date} onChange={handleChange} />
+                                <Input type="date" name="date" value={formdata.date} onChange={handleChange} placeholder="Date" />
                                 <Input type="time" name="time" value={formdata.time} onChange={handleChange} />
-                                <Input type="date" name="deadline" value={formdata.deadline} onChange={handleChange} />
+                                <Input type="date" name="deadline" value={formdata.deadline} onChange={handleChange} placeholder="Deadline"/>
                                 <Input name="location" value={formdata.location} onChange={handleChange} placeholder="Location" />
 
                                 <Select

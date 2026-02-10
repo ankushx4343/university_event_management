@@ -7,11 +7,11 @@ import eventRoute from './routes/eventRoute.js';
 import userRoute from  './routes/userRoute.js';
 import notificationRoute from './routes/notificationRoute.js'
 import otproute from './routes/otproute.js'
+import globalErrorHandler from './middlewares/globalErrorHandler.js';
 dotenv.config();
 
 const app=express();
 const port=process.env.PORT ||5000
-
 //connect databse
 connectDB();
 
@@ -31,6 +31,7 @@ app.use("/api/event",eventRoute);
 app.use("/api/user",userRoute);
 app.use("/api/notifications",notificationRoute);
 app.use("/api/otp",otproute);
+app.use(globalErrorHandler);
 
 app.get("/api/test",(req,res)=>{
     res.json({

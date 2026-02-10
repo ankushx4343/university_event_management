@@ -3,47 +3,18 @@ import Event from "../models/eventModel.js"
 import { createNotification } from "./notificationController.js";
 import userModel from "../models/userModel.js";
 import {sendEventRegistrationEmail, sendEventReminderEmail} from '../services/emailservices.js'
+import { createEventService } from "../services/eventService.js";
+import {catchAsync} from "../utils/catchAsync.js";
 
 //creating event
-export const createEvent = async (req, res) => {
-    try {
-        const { title, description, eventdate, eventtime, registrationdeadline, location, capacity,category } = req.body;
-        if (!title || !description || !eventdate || !eventtime || !registrationdeadline || !location || !capacity ||!category) {
-            return res.status(400).json({
-                success: false,
-                msg: "all fields are required"
-            })
-        }
-        const event = await Event.create({
-            title,
-            description,
-            eventdate,
-            eventtime,
-            registrationdeadline,
-            location,
-            capacity,
-            category,
-            createdBy: req.user._id
-        })
-
-        if (!event) {
-            return res.status(500).json({
-                success: false,
-                msg: "internal server error"
-            })
-        }
-        return res.status(201).json({
-            success: true,
-            msg: "event created successfully",
-            event: event
-        })
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            msg: error.message
-        })
-    }
-}
+export const createEvent = catchAsync(async (req, res) => {
+    const event=await createEventService(req.body,req.user._id);
+    return res.status(201).json({
+        success:true,
+        message:"event created successfully",
+        event
+    })
+})
 
 //getting all events
 export const getAllEvent = async (req, res) => {
