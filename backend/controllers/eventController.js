@@ -3,7 +3,7 @@ import Event from "../models/eventModel.js"
 import { createNotification } from "./notificationController.js";
 import userModel from "../models/userModel.js";
 import {sendEventRegistrationEmail, sendEventReminderEmail} from '../services/emailservices.js'
-import { createEventService, getAllEventsService, getEventByIdService } from "../services/eventService.js";
+import { createEventService, getAllEventsService, getEventByIdService, registerForEventService } from "../services/eventService.js";
 import {catchAsync} from "../utils/catchAsync.js";
 
 //creating event
@@ -215,82 +215,9 @@ export const registeredUsers = async (req, res) => {
 //Now for user 
 //registerForEvent
 export const registerForEvent = async (req, res) => {
-    try {
         const eventId = req.params.id;
         const userId = req.user.id;
-
-        //Event find kro
-        if (!mongoose.Types.ObjectId.isValid(eventId)) {
-            return res.status(400).json({
-                success: false,
-                msg: "invalid event id"
-            })
-        }
-        const event = await Event.findById(eventId);
-        const user = await userModel.findById(userId);
-        //Already registered for the event or not
-        const alreadyRegistered = event.registereduser.includes(userId);
-        if (alreadyRegistered) {
-            return res.status(400).json({
-                success: false,
-                msg: "you have already registered for the event"
-            })
-        }
-  
-        //capacity full toh nhi ho gyi hai 
-        if (event.registereduser.length >= event.capacity) {
-            return res.status(400).json({
-                success: false,
-                msg: "event is full registrations are full"
-            })
-        }
-
-        const currentDate = new Date();
-        if (currentDate > event.registrationdeadline) {
-            return res.status(400).json({
-                success: false,
-                msg: "registration deadline has passed"
-            })
-        }
-
-        //sbb validation pass- do registration
-        //now the main work starts form here
-
-        event.registereduser.push(userId);
-        await event.save();
-
-        user.registeredEvents.push(eventId)
-        await user.save()
-        //notificaton create krte hai
-        const notification = await createNotification(
-            userId,
-            `user registered for the ${event.title} successfuly`,
-            "registration_success",
-            eventId
-        )
-        if (!notification) {
-            return res.status(400).json({
-                success: false,
-                msg: "error in creating notification"
-            })
-        }
-
-         // 🆕 SEND CONFIRMATION EMAIL
-        const emailResult = await sendEventRegistrationEmail(
-            user.email,
-            user.firstname,
-            {
-                title: event.title,
-                date: event.eventdate,
-                time: event.eventtime,
-                venue: event.location
-            }
-        );
-
-        if (!emailResult.success) {
-            console.error('Failed to send confirmation email:', emailResult.error);
-            // Don't fail the registration if email fails
-        }
+        const event=await registerForEventService(eventId,userId);
         return res.status(200).json({
             success: true,
             msg: "successfully registered for the event",
@@ -300,13 +227,6 @@ export const registerForEvent = async (req, res) => {
                 availableSeats: event.capacity - event.registereduser.length
             }
         })
-    } catch (error) {
-        console.error("registration error:", error);
-        res.status(500).json({
-            success: false,
-            msg: "internal server error"
-        })
-    }
 }
 
 //unregisterForEvent
@@ -340,18 +260,18 @@ export const unregisterForEvent = async (req, res) => {
         await event.save();
 
         //notification creation
-        const notification = await createNotification(
-            userId,
-            `user unregistered for the ${event.title}`,
-            "registration_canceled",
-            eventId
-        )
-        if (!notification) {
-            return res.status(400).json({
-                success: false,
-                msg: "error in creating notifications"
-            })
-        }
+        // const notification = await createNotification(
+        //     userId,
+        //     `user unregistered for the ${event.title}`,
+        //     "registration_canceled",
+        //     eventId
+        // )
+        // if (!notification) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         msg: "error in creating notifications"
+        //     })
+        // }
         const indexOfEvent = user.registeredEvents.indexOf(eventId)
         console.log(indexOfEvent);
         console.log(user.registeredEvents)

@@ -57,14 +57,14 @@ export const markNotification=async(req,res)=>{
 }
 
 //helper function -Notification creating
-export const createNotification=async(userId,message,type,relatedEvent=null)=>{
+export const createNotification=async(userId,message,type,relatedEvent=null,session)=>{
    try {
-    const notification=await Notification.create({
+    const notification=await Notification.create([{
         user:userId,
         message:message,
         type:type,
         relatedEvents:relatedEvent
-    })
+    }],{session})
     return notification
    } catch (error) {
     console.error("error while creating notification:",error)
