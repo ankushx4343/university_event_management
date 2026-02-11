@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Event from "../models/eventModel.js";
 import  AppError from "../utils/AppError.js";
 
@@ -52,5 +53,23 @@ export const createEventService=async(data,userId)=>{
         category,
         createdBy:userId
     })
+    return event;
+}
+
+export const getAllEventsService=async()=>{
+    const events=await Event.find()
+    .populate('createdBy','firstname lastname email _id')
+    .populate('registereduser','firstname lastname email studentId department');
+    return events;
+}
+
+export const getEventByIdService=async(event_id)=>{
+    if(!mongoose.Types.ObjectId.isValid(event_id)){
+        throw new AppError("event id is not valid",400)
+    }
+    const event=await Event.findById(event_id);
+    if(!event){
+        throw new AppError("event not found",404);
+    }
     return event;
 }

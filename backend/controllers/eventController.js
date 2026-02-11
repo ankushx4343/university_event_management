@@ -3,7 +3,7 @@ import Event from "../models/eventModel.js"
 import { createNotification } from "./notificationController.js";
 import userModel from "../models/userModel.js";
 import {sendEventRegistrationEmail, sendEventReminderEmail} from '../services/emailservices.js'
-import { createEventService } from "../services/eventService.js";
+import { createEventService, getAllEventsService, getEventByIdService } from "../services/eventService.js";
 import {catchAsync} from "../utils/catchAsync.js";
 
 //creating event
@@ -17,55 +17,24 @@ export const createEvent = catchAsync(async (req, res) => {
 })
 
 //getting all events
-export const getAllEvent = async (req, res) => {
-    try {
-        const events = await Event.find()
-        .populate('createdBy','firstname lastname email _id')
-        .populate('registereduser','firstname lastname email studentId department')
+export const getAllEvent = catchAsync(async (req, res) => {
+        const events=await getAllEventsService();
         return res.status(200).json({
             success: true,
             msg: "event fetched successfully",
             events: events
         })
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            msg: "Internal server error while fetching events",
-            error: error.message
-        })
-    }
-
-}
+})
 
 //get event by its id
-export const getEventById = async (req, res) => {
-    try {
+export const getEventById = catchAsync(async (req, res) => {
         const eventId = req.params.id
-        if (!mongoose.Types.ObjectId.isValid(eventId)) {
-            return res.status(400).json({
-                success: false,
-                msg: "invalid event id"
-            })
-        }
-        const event = await Event.findById(eventId);
-        if (!event) {
-            return res.status(404).json({
-                success: false,
-                msg: "event not found"
-            })
-        }
+        const event=await getEventByIdService(eventId);
         return res.status(200).json({
             success: true,
             event: event
         })
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            msg: "internal server error",
-            error: error.message
-        })
-    }
-}
+})
 
 //update event
 export const updateEvent = async (req, res) => {
