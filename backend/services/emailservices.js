@@ -12,16 +12,24 @@ export const getTransporter = () => {
         user: process.env.BREVO_SMTP_USER,
         pass: process.env.BREVO_SMTP_PASS,
       },
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
+      tls: {
+        rejectUnauthorized: false,
+        servername: "smtp-relay.brevo.com",
+      },
     });
   }
   return transporter;
 };
 
+
 // 1️⃣ Event Registration Email
 export const sendEventRegistrationEmail = async (userEmail, userName, eventDetails) => {
   try {
     const transporter = getTransporter();
-
+    console.log("reached")
     const info = await transporter.sendMail({
       from: `University Events <${process.env.BREVO_SENDER_EMAIL}>`,
       to: userEmail,
