@@ -221,6 +221,7 @@ export const registerForEvent = async (req, res) => {
         return res.status(200).json({
             success: true,
             msg: "successfully registered for the event",
+            event,
             data: {
                 eventTitle: event.title,
                 registrationCount: event.registereduser.length,
@@ -282,9 +283,7 @@ export const unregisterForEvent = async (req, res) => {
         return res.status(200).json({
             success: true,
             msg: "successfuly unregistered to the event",
-            data: {
-                event
-            }
+            event
         })
     } catch (error) {
         console.log(error.message);
