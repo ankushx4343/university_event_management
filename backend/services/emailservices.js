@@ -1,42 +1,40 @@
 import nodemailer from "nodemailer";
 
-// Create a singleton transporter
-let transporter = null;
-const getTransporter = () => {
+let transporter;
+
+export const getTransporter = () => {
   if (!transporter) {
-        transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // IMPORTANT
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD,
-  },
-});
+    transporter = nodemailer.createTransport({
+      host: process.env.BREVO_SMTP_HOST,
+      port: Number(process.env.BREVO_SMTP_PORT),
+      secure: false,
+      auth: {
+        user: process.env.BREVO_SMTP_USER,
+        pass: process.env.BREVO_SMTP_PASS,
+      },
+    });
   }
   return transporter;
 };
 
-// 1️⃣ Send Event Registration Email
+// 1️⃣ Event Registration Email
 export const sendEventRegistrationEmail = async (userEmail, userName, eventDetails) => {
   try {
     const transporter = getTransporter();
 
     const info = await transporter.sendMail({
-      from: `"University Events" <${process.env.SMTP_USER}>`,
+      from: `University Events <${process.env.BREVO_SENDER_EMAIL}>`,
       to: userEmail,
       subject: `Registration Confirmed: ${eventDetails.title}`,
       html: `
         <h2>Hello ${userName}!</h2>
         <p>You have successfully registered for <strong>${eventDetails.title}</strong></p>
-        <h3>Event Details:</h3>
         <ul>
           <li><strong>Date:</strong> ${new Date(eventDetails.date).toLocaleDateString()}</li>
           <li><strong>Time:</strong> ${eventDetails.time}</li>
           <li><strong>Venue:</strong> ${eventDetails.venue}</li>
         </ul>
-        <p>We look forward to seeing you there!</p>
-        <p>Best regards,<br>University Events Team</p>
+        <p>See you there!</p>
       `,
     });
 
@@ -47,26 +45,24 @@ export const sendEventRegistrationEmail = async (userEmail, userName, eventDetai
   }
 };
 
-// 2️⃣ Send Event Reminder Email
+// 2️⃣ Event Reminder Email
 export const sendEventReminderEmail = async (userEmail, userName, eventDetails) => {
   try {
     const transporter = getTransporter();
 
     const info = await transporter.sendMail({
-      from: `"University Events" <${process.env.SMTP_USER}>`,
+      from: `University Events <${process.env.BREVO_SENDER_EMAIL}>`,
       to: userEmail,
-      subject: `Reminder: ${eventDetails.title} is Tomorrow!`,
+      subject: `Reminder: ${eventDetails.title} is Tomorrow`,
       html: `
         <h2>Hello ${userName}!</h2>
-        <p>This is a friendly reminder about your upcoming event:</p>
+        <p>This is a reminder for:</p>
         <h3>${eventDetails.title}</h3>
         <ul>
           <li><strong>Date:</strong> ${new Date(eventDetails.date).toLocaleDateString()}</li>
           <li><strong>Time:</strong> ${eventDetails.time}</li>
           <li><strong>Venue:</strong> ${eventDetails.venue}</li>
         </ul>
-        <p>Don't forget to attend!</p>
-        <p>Best regards,<br>University Events Team</p>
       `,
     });
 
@@ -77,18 +73,20 @@ export const sendEventReminderEmail = async (userEmail, userName, eventDetails) 
   }
 };
 
-// 3️⃣ Send OTP Email
+// 3️⃣ OTP Email
 export const sendOTP = async (email, otp) => {
   try {
     const transporter = getTransporter();
 
     const info = await transporter.sendMail({
-      from: `"University Events" <${process.env.SMTP_USER}>`,
+      from: `University Events <${process.env.BREVO_SENDER_EMAIL}>`,
       to: email,
-      subject: `Your OTP for uniE signup is: ${otp}`,
+      subject: "Your OTP for uniE",
       html: `
-        <h2>Hello ${email}!</h2>
-        <p>Your OTP for uniE is <strong>${otp}</strong></p>
+        <h2>Email Verification</h2>
+        <p>Your OTP is:</p>
+        <h1>${otp}</h1>
+        <p>This otp expires in 5 minutes.</p>
       `,
     });
 
