@@ -80,21 +80,43 @@ function Dashboard() {
   }
 
   //helps in showing changes on frontend intantly after user register for an event 
-  const handleRegister = (event) => {
+  const handleRegister = (updatedEvent) => {
+    setEvents(prev =>
+      prev.map(ev =>
+        ev._id === updatedEvent._id ? updatedEvent : ev
+      )
+    );
+setRegisteredEvents(prev => {
+  const exists = prev.some(ev => ev._id === updatedEvent._id);
 
-    event.registereduser = [...event.registereduser, user._id]
-    setRegisteredEvents((prev) => {
-      const updated = [...prev, event];
-      console.log("updated inside set:", updated)
-      return updated;
-    })
+  if (exists) {
+    return prev.map(ev =>
+      ev._id === updatedEvent._id ? updatedEvent : ev
+    );
   }
+
+  return [...prev, updatedEvent];
+});
+
+
+    setSelectedevent(updatedEvent);
+  };
+
 
   //helps in showing changes on frontend intantly after user unregister for an event 
-  const handleUnregister = (event) => {
-    event.registereduser = event.registereduser.filter((us) => us != user._id)
-    setRegisteredEvents((prev) => prev.filter(ev => ev.id !== event.id))
-  }
+  const handleUnregister = (updatedEvent) => {
+    setEvents(prev =>
+      prev.map(ev =>
+        ev._id === updatedEvent._id ? updatedEvent : ev
+      )
+    );
+
+    setRegisteredEvents(prev =>
+     prev.filter(ev => ev._id !== updatedEvent._id)
+    );
+    setSelectedevent(updatedEvent);
+  };
+
   if (!user) {
     return (
       <Badge>

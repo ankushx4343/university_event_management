@@ -21,7 +21,7 @@ function NewLogin() {
     const [password, setPassword] = useState();
     const navigate = useNavigate();
     const { login } = useContext(AuthContex);
-    const [loading,setLoading]=useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -45,49 +45,51 @@ function NewLogin() {
         }
     };
 
-return (
-    <Card>
-        <CardHeader>
-            <CardTitle>Log in</CardTitle>
-            <CardDescription>Enter your email below to login to your account</CardDescription>
-            <CardAction>
-                <Link to={"/register"}>
-                    <Button variant="link">Sign up</Button>
-                </Link>
-            </CardAction>
-        </CardHeader>
-        <CardContent>
-            <form >
-                <div className="flex flex-col gap-6">
-                    <div className="grid gap-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            placeholder="an@gmail.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
+    return (
+        <form onSubmit={handleLogin} >
+            <Card>
+                <CardHeader>
+                    <CardTitle>Log in</CardTitle>
+                    <CardDescription>Enter your email below to login to your account</CardDescription>
+                    <CardAction>
+                        <Link to={"/register"}>
+                            <Button variant="link" type="button">Sign up</Button>
+                        </Link>
+                    </CardAction>
+                </CardHeader>
+                <CardContent>
+
+                    <div className="flex flex-col gap-6">
+                        <div className="grid gap-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="an@gmail.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="password">Password</Label>
+                            <Input
+                                id="password"
+                                type="text"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
                     </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                            id="password"
-                            type="text"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                </div>
-            </form>
-        </CardContent>
-        <CardFooter className="flex-col gap-2">
-            <Button type="submit" className="w-full" onClick={handleLogin}>{loading?"loging...":"login"}</Button>
-        </CardFooter>
-    </Card>
-)
+
+                </CardContent>
+                <CardFooter className="flex-col gap-2">
+                    <Button type="submit" className="w-full">{loading ? "loging..." : "login"}</Button>
+                </CardFooter>
+            </Card>
+        </form>
+    )
 }
 
 export default NewLogin

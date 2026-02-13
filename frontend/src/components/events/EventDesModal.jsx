@@ -1,20 +1,17 @@
 import { Calendar, Clock, Layers, MapPin, Users, X } from 'lucide-react'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import api from '../../services/api';
 import toast, { Toaster } from 'react-hot-toast';
 import { AuthContex } from '../../context/AuthContext';
 
 function EventDesModal({ event, isOpen, onClose, onUnregister, onRegister }) {
-    const [isRegistered, setIsregistered] = useState(false);
     const { user } = useContext(AuthContex)
-    console.log(event.registereduser)
-    useEffect(() => {
-        if (event.registereduser.some(
-            RU => RU._id === user._id
-        )) {
-            setIsregistered(true)
-        }
-    }, [])
+    const [loading, setLoading] = useState(false);
+   const isRegistered = event?.registereduser?.some(
+  RU => (RU._id ?? RU) === user?._id
+);
+
+
     if (!isOpen || !event) return null;
     const handleBackdropClick = (e) => {
         if (e.target === e.currentTarget) {
@@ -24,28 +21,32 @@ function EventDesModal({ event, isOpen, onClose, onUnregister, onRegister }) {
 
     const handleRegister = async () => {
         try {
-            console.log("register")
+            setLoading(true);
             const res = await api.put(`/event/register/${event.id}`)
-            onRegister(event)
-            setIsregistered(true)
+            onRegister(res.data.event)
             toast.success(res.data.msg)
-            console.log(res.data.msg)
+
         } catch (error) {
-            console.log(error.response.data.msg)
+
             toast.error(error.response.data.msg)
+        } finally {
+            setLoading(false)
         }
     }
 
     const handleUnregister = async () => {
         try {
+            setLoading(true)
+            console.log(event)
             const res = await api.delete(`/event/register/${event.id}`)
-            onUnregister(event)
+            onUnregister(res.data.event)
             toast.success("unregistered successfully")
-            setIsregistered(false);
             console.log(res);
         } catch (error) {
             console.log(error.message)
             toast.error("cannot unregister for the event")
+        } finally {
+            setLoading(false);
         }
     }
     const formattedDate = new Date(event.eventdate).toLocaleDateString("en-GB", {
@@ -123,11 +124,11 @@ function EventDesModal({ event, isOpen, onClose, onUnregister, onRegister }) {
                     {
                         isRegistered ? (
                             <div onClick={handleUnregister} className='w-[90%] bg-red-400 text-black rounded-2xl p-5 mx-4 text-xl font-semibold  hover:bg-red-600 hover:text-white transition ease-in'>
-                                UnRegister
+                                {loading ? "unregistering...." : "unregister"}
                             </div>
                         ) : (
                             <div onClick={handleRegister} className='w-[90%] bg-blue-500 rounded-2xl p-5 mx-4 text-xl font-semibold text-white hover:bg-blue-600'>
-                                Register
+                                {loading ? "registering...." : "register"}
                             </div>
                         )
                     }

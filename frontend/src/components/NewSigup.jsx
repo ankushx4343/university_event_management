@@ -94,18 +94,18 @@ function NewSignup() {
     }
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Sign up</CardTitle>
-                <CardDescription>Enter your details below to signup </CardDescription>
-                <CardAction>
-                    <Link to={"/login"}>
-                        <Button variant="link">Log in</Button>
-                    </Link>
-                </CardAction>
-            </CardHeader>
-            <CardContent>
-                <form >
+        <form >
+            <Card>
+                <CardHeader>
+                    <CardTitle>Sign up</CardTitle>
+                    <CardDescription>Enter your details below to signup </CardDescription>
+                    <CardAction>
+                        <Link to={"/login"}>
+                            <Button type="button" variant="link">Log in</Button>
+                        </Link>
+                    </CardAction>
+                </CardHeader>
+                <CardContent>
 
                     <div className="flex flex-col gap-3">
                         <div className="grid gap-1">
@@ -189,23 +189,23 @@ function NewSignup() {
                         </div>
                     </div>
 
-                </form>
-            </CardContent>
-            <CardFooter className="flex-col gap-2">
-                {phase === "email" && (
-                    <Button onClick={handleSendOtp} disabled={loading}>
-                        Send OTP
-                    </Button>
-                )}
+                </CardContent>
+                <CardFooter className="flex-col gap-2">
+                    {phase === "email" && (
+                        <Button  onClick={handleSendOtp} disabled={loading}>
+                            Send OTP
+                        </Button>
+                    )}
 
-                {phase === "signup" && (
-                    <Button onClick={handleRegister} disabled={loading}>
-                        {loading ? "Loading..." : "Sign Up"}
-                    </Button>
-                )}
-            </CardFooter>
+                    {phase === "signup" && (
+                        <Button  onClick={handleRegister} disabled={loading}>
+                            {loading ? "Loading..." : "Sign Up"}
+                        </Button>
+                    )}
+                </CardFooter>
 
-        </Card>
+            </Card>
+        </form>
     )
 }
 
